@@ -16,6 +16,8 @@ public class main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        MyMediaPlayer p = new MyMediaPlayer();
+        p.start(null);
     }
     
 }
