@@ -6,6 +6,7 @@
 package mms;
 
 import java.io.File;
+import java.io.IOException;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -15,11 +16,13 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioSpectrumListener;
@@ -42,34 +45,41 @@ public class MyMediaPlayer extends Application {
         launch(args);
     }
 
-    public void start(Stage primaryStage) {
-        String workingDir = System.getProperty("user.dir");
-        final File f = new File(workingDir, "../media/omgrobots.flv");
+    public void start(Stage stage) throws IOException {
 
-        final Media m = new Media("http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv");
-        final MediaPlayer mp = new MediaPlayer(m);
-        final MediaView mv = new MediaView(mp);
+        //Load GUI
+        Pane root = (Pane) FXMLLoader.load(getClass().getClassLoader().getResource("View/GUI.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
 
-        final DoubleProperty width = mv.fitWidthProperty();
-        final DoubleProperty height = mv.fitHeightProperty();
-
-        width.bind(Bindings.selectDouble(mv.sceneProperty(), "width"));
-        height.bind(Bindings.selectDouble(mv.sceneProperty(), "height"));
-
-        mv.setPreserveRatio(true);
-
-        StackPane root = new StackPane();
-        root.getChildren().add(mv);
-
-        final Scene scene = new Scene(root, 960, 540);
-        scene.setFill(Color.BLACK);
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Full Screen Video Player");
-        primaryStage.setFullScreen(true);
-        primaryStage.show();
-
-        mp.play();
+//        String workingDir = System.getProperty("user.dir");
+//        final File f = new File(workingDir, "../media/omgrobots.flv");
+//
+//        final Media m = new Media("http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv");
+//        final MediaPlayer mp = new MediaPlayer(m);
+//        final MediaView mv = new MediaView(mp);
+//
+//        final DoubleProperty width = mv.fitWidthProperty();
+//        final DoubleProperty height = mv.fitHeightProperty();
+//
+//        width.bind(Bindings.selectDouble(mv.sceneProperty(), "width"));
+//        height.bind(Bindings.selectDouble(mv.sceneProperty(), "height"));
+//
+//        mv.setPreserveRatio(true);
+//
+//        StackPane root = new StackPane();
+//        root.getChildren().add(mv);
+//
+//        final Scene scene = new Scene(root, 960, 540);
+//        scene.setFill(Color.BLACK);
+//
+//        primaryStage.setScene(scene);
+//        primaryStage.setTitle("Full Screen Video Player");
+//        primaryStage.setFullScreen(true);
+//        primaryStage.show();
+//
+//        mp.play();
     }
 
     public void startBugged(final Stage stage) throws Exception {
