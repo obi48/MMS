@@ -38,8 +38,8 @@ public class GUIController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {        
-        Media m = new Media("http://ccdn1.tooxclusive.com/wp-content/uploads/2015/04/See-You-Again-Wiz-Khalifa-feat-Char.mp3");
-//        Media m = new Media("http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv");
+//        Media m = new Media("http://tegos.kz/new/mp3_full/Eminem_feat_Rihanna_-_The_Monster.mp3");
+        Media m = new Media("http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv");
         MediaPlayer mp = new MediaPlayer(m);
         mediaView.setMediaPlayer(mp);
         
