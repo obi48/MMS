@@ -22,13 +22,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import mms.Pluginsystem.Impl.PluginManager;
 import mms.Pluginsystem.PluginInterface;
 import mms.Pluginsystem.PluginManagerInterface;
 
