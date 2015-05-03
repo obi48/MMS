@@ -99,18 +99,18 @@ public class PluginManager implements Initializable, PluginManagerInterface {
             //Create the JAR-object
             JarFile jar = new JarFile(file);
 
-            JarEntry entry;
+            String entryName;
             Enumeration<JarEntry> entries = jar.entries();
 
             while (entries.hasMoreElements()) {
-                entry = entries.nextElement();
+                entryName = entries.nextElement().getName();
 
-                if (entry.getName().endsWith(".class")) {
+                if (entryName.endsWith(".class")) {
                     //Load class
                     URLClassLoader loader = new URLClassLoader(new URL[]{file.toURI().toURL()});
 
                     //Delete .class and replace / with .
-                    String className = entry.getName().substring(0, entry.getName().length() - 6).replace('/', '.');
+                    String className = entryName.substring(0, entryName.length() - 6).replace('/', '.');
 
                     //Load class
                     Class cl = loader.loadClass(className);
