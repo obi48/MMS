@@ -26,7 +26,8 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
 
         //Load GUI
-        Pane root = (Pane) FXMLLoader.load(getClass().getClassLoader().getResource("View/GUI.fxml"));
+        Pane root = (Pane) FXMLLoader.load(getClass().getClassLoader().getResource("mms/View/GUI.fxml"));
+        
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
