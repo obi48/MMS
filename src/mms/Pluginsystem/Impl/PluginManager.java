@@ -119,15 +119,11 @@ public class PluginManager implements Initializable, PluginManagerInterface {
                     Class[] interfaces = cl.getInterfaces();
 
                     //Check implemented interfaces (should implement our PluginInterface)
-                    boolean isPlugin = false;
-                    for (int y = 0; y < interfaces.length && !isPlugin; y++) {
-                        if (interfaces[y].getName().equals(PluginInterface.class.getCanonicalName())) {
-                            isPlugin = true;
+                    for (int i = 0; i < interfaces.length; i++) {
+                        if (interfaces[i].isAssignableFrom(PluginInterface.class)) {
+                            loadedPlugins.add((PluginInterface) cl.newInstance());
+                            break;
                         }
-                    }
-
-                    if (isPlugin) {
-                        loadedPlugins.add((PluginInterface) cl.newInstance());
                     }
                 }
             }
