@@ -5,7 +5,8 @@
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
             <name>MMS</name>
             <source-roots>
-                <root id="src.dir"/>
+                <root id="src.dir" name="src"/>
+                <root id="src.Plugins.dir"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>

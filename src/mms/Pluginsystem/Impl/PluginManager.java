@@ -56,8 +56,6 @@ public class PluginManager implements Initializable, PluginManagerInterface {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Media m = new Media("http://tegos.kz/new/mp3_full/Eminem_feat_Rihanna_-_The_Monster.mp3");
-//        Media m = new Media("http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv");
 
         DoubleProperty width = mediaView.fitWidthProperty();
         DoubleProperty height = mediaView.fitHeightProperty();
@@ -65,12 +63,18 @@ public class PluginManager implements Initializable, PluginManagerInterface {
         width.bind(Bindings.selectDouble(mediaView.sceneProperty(), "width"));
         height.bind(Bindings.selectDouble(mediaView.sceneProperty(), "height"));
 
-        MediaPlayer mp = new MediaPlayer(m);
-        mediaView.setMediaPlayer(mp);
-
-        mp.play();
-        
+        //Load plugins
         start();
+
+        PluginManager manager = this;
+        
+        //Will be called on program exit
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                manager.stop();
+            }
+        });
     }
 
     public void start() {
@@ -79,6 +83,7 @@ public class PluginManager implements Initializable, PluginManagerInterface {
             loadPlugin(f);
         }
         loadedPlugins.stream().forEach((pi) -> {
+            pi.setPluginManager(this);
             pi.start();
         });
     }
@@ -100,9 +105,15 @@ public class PluginManager implements Initializable, PluginManagerInterface {
             while (entries.hasMoreElements()) {
                 entry = entries.nextElement();
 
-                if (entry.getName().endsWith(PluginInterface.class.getName())) {
+                if (entry.getName().endsWith(".class")) {
                     //Load class
-                    Class cl = new URLClassLoader(new URL[]{file.toURI().toURL()}).loadClass(entry.getName());
+                    URLClassLoader loader = new URLClassLoader(new URL[]{file.toURI().toURL()});
+
+                    //Delete .class and replace / with .
+                    String className = entry.getName().substring(0, entry.getName().length() - 6).replace('/', '.');
+
+                    //Load class
+                    Class cl = loader.loadClass(className);
 
                     //Get implemented Interfaces
                     Class[] interfaces = cl.getInterfaces();
@@ -110,7 +121,7 @@ public class PluginManager implements Initializable, PluginManagerInterface {
                     //Check implemented interfaces (should implement our PluginInterface)
                     boolean isPlugin = false;
                     for (int y = 0; y < interfaces.length && !isPlugin; y++) {
-                        if (interfaces[y].getName().equals("mms.Pluginsystem.PluginInterface")) { //TODO replace string with refactorable class.getName...
+                        if (interfaces[y].getName().equals(PluginInterface.class.getCanonicalName())) {
                             isPlugin = true;
                         }
                     }
