@@ -63,7 +63,7 @@ public class PluginManager implements Initializable, PluginManagerInterface {
         //Load plugins
         start();
 
-        final PluginManager manager = this;
+        PluginManager manager = this;
 
         //Will be called on program exit
         Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -98,7 +98,6 @@ public class PluginManager implements Initializable, PluginManagerInterface {
 
             String entryName;
             Enumeration<JarEntry> entries = jar.entries();
-            jar.close();
 
             while (entries.hasMoreElements()) {
                 entryName = entries.nextElement().getName();
@@ -121,6 +120,7 @@ public class PluginManager implements Initializable, PluginManagerInterface {
                     }
                 }
             }
+            jar.close();
         } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(PluginManager.class.getName()).log(Level.SEVERE, null, ex);
         }
