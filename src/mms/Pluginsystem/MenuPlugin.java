@@ -5,12 +5,17 @@
  */
 package mms.Pluginsystem;
 
+import javafx.scene.control.MenuBar;
+
 /**
  *
  * @author Michael Obermüller
  */
-public interface PluginInterface {
-    public boolean start();
-    public boolean stop();
-    public void setPluginManager(PluginManagerInterface manager);
+public abstract class MenuPlugin extends Plugin {
+    protected final MenuBar menu;
+    
+    public MenuPlugin(PluginHost pluginHost, MenuBar menu){
+        super(pluginHost);
+        this.menu = menu;
+    }
 }
