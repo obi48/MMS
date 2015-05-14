@@ -13,12 +13,14 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
@@ -93,7 +95,8 @@ public class PluginController extends PluginHost implements Initializable {
     }
 
     public void stop() {
-        loadedPlugins.stream().forEach(pi -> pi.stop());
+        //Stop reversed
+        loadedPlugins.stream().collect(Collectors.toCollection(LinkedList::new)).descendingIterator().forEachRemaining(pi -> pi.stop());
     }
 
     public void loadPlugin(File file) {
