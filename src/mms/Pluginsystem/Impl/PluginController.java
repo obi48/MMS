@@ -120,10 +120,9 @@ public class PluginController extends PluginHost implements Initializable {
     }
 
     public void loadPlugin(File file) {
-        try {
-            //Create the JAR-object
-            JarFile jar = new JarFile(file);
 
+        //try with ressources
+        try (JarFile jar = new JarFile(file)) {
             String entryName;
             Enumeration<JarEntry> entries = jar.entries();
 
@@ -131,15 +130,15 @@ public class PluginController extends PluginHost implements Initializable {
                 entryName = entries.nextElement().getName();
 
                 if (entryName.endsWith(".class")) {
-                    //Load class
-                    URLClassLoader loader = new URLClassLoader(new URL[]{file.toURI().toURL()});
+                    Class cl;
 
-                    //Delete .class and replace / with .
-                    String className = entryName.substring(0, entryName.length() - 6).replace('/', '.');
-
-                    //Load class
-                    Class cl = loader.loadClass(className);
-                    loader.close();
+                    //try with ressources
+                    try (URLClassLoader loader = new URLClassLoader(new URL[]{file.toURI().toURL()})) {
+                        //Delete .class and replace / with .
+                        String className = entryName.substring(0, entryName.length() - 6).replace('/', '.');
+                        //Load class
+                        cl = loader.loadClass(className);
+                    }
 
                     //Check implemented interfaces (should implement our PluginInterface)
                     if (ControlPlugin.class.isAssignableFrom(cl)) {
@@ -165,7 +164,6 @@ public class PluginController extends PluginHost implements Initializable {
                     }
                 }
             }
-            jar.close();
         } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(PluginHost.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
