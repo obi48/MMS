@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mms.Pluginsystem;
+package mms.Pluginsystem.Impl;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import mms.Pluginsystem.ControlPlugin;
+import mms.Pluginsystem.PluginHost;
 
 /**
  *

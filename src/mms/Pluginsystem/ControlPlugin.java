@@ -5,6 +5,8 @@
  */
 package mms.Pluginsystem;
 
+import javafx.event.EventType;
+import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;

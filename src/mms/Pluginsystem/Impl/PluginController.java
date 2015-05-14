@@ -23,6 +23,9 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuBar;
@@ -32,8 +35,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import mms.Pluginsystem.ControlPlugin;
-import mms.Pluginsystem.DefaultControlPlugin;
-import mms.Pluginsystem.DefaultMenuPlugin;
 import mms.Pluginsystem.MenuPlugin;
 import mms.Pluginsystem.Plugin;
 import mms.Pluginsystem.PluginHost;
@@ -179,6 +180,26 @@ public class PluginController extends PluginHost implements Initializable {
     public void setPlayer(MediaPlayer player) {
         mediaView.setMediaPlayer(player);
         controlPlugin.onMediaPlayerChanged(player);
+    }
+    
+    @Override
+    public <T extends Event> void addUIEventHandler(EventType<T> eventType, EventHandler<? super T> eventHandler) {
+        anchorPane.addEventHandler(eventType, eventHandler);
+    }
+
+    @Override
+    public <T extends Event> void addUIEventFilter(EventType<T> eventType, EventHandler<? super T> eventFilter) {
+        anchorPane.addEventFilter(eventType, eventFilter);
+    }
+
+    @Override
+    public <T extends Event> void removeUIEventHandler(EventType<T> eventType, EventHandler<? super T> eventHandler) {
+        anchorPane.removeEventHandler(eventType, eventHandler);
+    }
+
+    @Override
+    public <T extends Event> void removeUIEventFilter(EventType<T> eventType, EventHandler<? super T> eventFilter) {
+        anchorPane.removeEventFilter(eventType, eventFilter);
     }
     //***********************************************************************/
 }

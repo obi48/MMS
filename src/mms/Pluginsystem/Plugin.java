@@ -28,7 +28,7 @@ public abstract class Plugin {
     public abstract String getVersion();
     public abstract String getDescription();
 
-    public final int getID() {
+    final int getID() {
         return (getDeveloper() + "," + getName() + "," + getVersion()).hashCode();
     }
 
