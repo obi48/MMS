@@ -55,7 +55,8 @@ public class PluginController extends PluginHost implements Initializable {
     private AnchorPane anchorPane;
 
     private ControlPlugin controlPlugin;
-    
+    private boolean loadedControl = false, loadedMenu = false;
+
     /**
      * Initializes the controller class.
      *
@@ -90,7 +91,26 @@ public class PluginController extends PluginHost implements Initializable {
         for (File f : files) {
             loadPlugin(f);
         }
-      
+
+        //Check if one MenuPlugin is loaded, if not load default one
+        if (!loadedMenu) {
+            loadedPlugins.add(new DefaultMenuPlugin(this, menuBar));
+        }
+
+        //Check if one ControlPlugin is loaded, if not load default one
+        if (!loadedControl) {
+            loadedPlugins.add(controlPlugin = new DefaultControlPlugin(this, anchorPane, mediaView));
+        }
+
+        //Sort plugins (Controlplugin is first then menuPlugin then others)
+        loadedPlugins.sort((Plugin o1, Plugin o2) -> {
+            if (o1 instanceof ControlPlugin || o1 instanceof MenuPlugin && o2 instanceof Plugin) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+
         loadedPlugins.stream().forEach(pi -> pi.start());
     }
 
@@ -106,8 +126,6 @@ public class PluginController extends PluginHost implements Initializable {
 
             String entryName;
             Enumeration<JarEntry> entries = jar.entries();
-
-            boolean loadedControl = false, loadedMenu = false;
 
             while (entries.hasMoreElements()) {
                 entryName = entries.nextElement().getName();
@@ -129,8 +147,7 @@ public class PluginController extends PluginHost implements Initializable {
                             controlPlugin = (ControlPlugin) cl.getDeclaredConstructor(PluginHost.class, AnchorPane.class, MediaView.class).newInstance(this, anchorPane, mediaView);
                             loadedPlugins.add(controlPlugin);
                             loadedControl = true;
-                        }
-                        else{
+                        } else {
                             //one ControlPlugin is already loaded! --> only one allowed
                             throw new IllegalStateException("Only one ControlPlugin is allowed! (loaded twice)");
                         }
@@ -139,8 +156,7 @@ public class PluginController extends PluginHost implements Initializable {
                             MenuPlugin plugin = (MenuPlugin) cl.getDeclaredConstructor(PluginHost.class, MenuBar.class).newInstance(this, menuBar);
                             loadedPlugins.add(plugin);
                             loadedMenu = true;
-                        }
-                        else{
+                        } else {
                             //one MenuPlugin is already loaded! --> only one allowed
                             throw new IllegalStateException("Only one MenuPlugin is allowed! (loaded twice)");
                         }
@@ -150,26 +166,6 @@ public class PluginController extends PluginHost implements Initializable {
                 }
             }
             jar.close();
-            
-            //Check if one MenuPlugin is loaded, if not load default one
-            if(!loadedMenu){
-                loadedPlugins.add(new DefaultMenuPlugin(this, menuBar));
-            }
-            
-            //Check if one ControlPlugin is loaded, if not load default one
-            if(!loadedControl){
-                loadedPlugins.add(controlPlugin = new DefaultControlPlugin(this, anchorPane, mediaView));
-            }
-            
-            //Sort plugins (Controlplugin is first then menuPlugin then others)
-            loadedPlugins.sort((Plugin o1, Plugin o2) -> {
-                if(o1 instanceof ControlPlugin || o1 instanceof MenuPlugin && o2 instanceof Plugin){
-                    return -1;
-                }
-                else{
-                    return 0;
-                }
-            });
         } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(PluginHost.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
