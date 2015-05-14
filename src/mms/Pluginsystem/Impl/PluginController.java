@@ -159,16 +159,12 @@ public class PluginController extends PluginHost implements Initializable {
             }
             
             //Sort plugins (Controlplugin is first then menuPlugin then others)
-            loadedPlugins.sort(new Comparator<Plugin>() {
-
-                @Override
-                public int compare(Plugin o1, Plugin o2) {
-                    if(o1 instanceof ControlPlugin || o1 instanceof MenuPlugin && o2 instanceof Plugin){
-                        return -1;
-                    }
-                    else{
-                        return 0;
-                    }
+            loadedPlugins.sort((Plugin o1, Plugin o2) -> {
+                if(o1 instanceof ControlPlugin || o1 instanceof MenuPlugin && o2 instanceof Plugin){
+                    return -1;
+                }
+                else{
+                    return 0;
                 }
             });
         } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
