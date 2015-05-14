@@ -121,7 +121,6 @@ public class PluginController extends PluginHost implements Initializable {
 
     public void loadPlugin(File file) {
 
-        //try with ressources
         try (JarFile jar = new JarFile(file)) {
             String entryName;
             Enumeration<JarEntry> entries = jar.entries();
@@ -132,7 +131,6 @@ public class PluginController extends PluginHost implements Initializable {
                 if (entryName.endsWith(".class")) {
                     Class cl;
 
-                    //try with ressources
                     try (URLClassLoader loader = new URLClassLoader(new URL[]{file.toURI().toURL()})) {
                         //Delete .class and replace / with .
                         String className = entryName.substring(0, entryName.length() - 6).replace('/', '.');
