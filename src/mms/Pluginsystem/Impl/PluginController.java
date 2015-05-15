@@ -8,6 +8,7 @@ package mms.Pluginsystem.Impl;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -125,7 +126,10 @@ public class PluginController extends PluginHost implements Initializable {
         try (JarFile jar = new JarFile(file)) {
             String entryName;
             Enumeration<JarEntry> entries = jar.entries();
-
+            
+            //Adds jar to SystemClassPath
+            addSoftwareLibrary(file);
+            
             while (entries.hasMoreElements()) {
                 entryName = entries.nextElement().getName();
 
@@ -167,7 +171,15 @@ public class PluginController extends PluginHost implements Initializable {
             Logger.getLogger(PluginHost.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(PluginController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(PluginController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void addSoftwareLibrary(File file) throws Exception {
+        Method method = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
+        method.setAccessible(true);
+        method.invoke(ClassLoader.getSystemClassLoader(), new Object[]{file.toURI().toURL()});
     }
 
     //******************************* API *************************************/
@@ -181,7 +193,7 @@ public class PluginController extends PluginHost implements Initializable {
         mediaView.setMediaPlayer(player);
         controlPlugin.onMediaPlayerChanged(player);
     }
-    
+
     @Override
     public <T extends Event> void addUIEventHandler(EventType<T> eventType, EventHandler<? super T> eventHandler) {
         anchorPane.addEventHandler(eventType, eventHandler);
@@ -202,4 +214,5 @@ public class PluginController extends PluginHost implements Initializable {
         anchorPane.removeEventFilter(eventType, eventFilter);
     }
     //***********************************************************************/
+
 }
