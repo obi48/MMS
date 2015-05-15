@@ -5,20 +5,9 @@
  */
 package mms.Pluginsystem.Impl;
 
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 import javafx.animation.FadeTransition;
-import javafx.event.EventHandler;
-import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TouchEvent;
 import javafx.util.Duration;
 import mms.Pluginsystem.MenuPlugin;
 import mms.Pluginsystem.PluginHost;
