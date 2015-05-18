@@ -1,9 +1,9 @@
-package mms.pluginsystem.impl;
+package mms.Pluginsystem.Impl;
 
 import javafx.scene.layout.AnchorPane;
 import mms.PlayerApp;
-import mms.pluginsystem.ControlPlugin;
-import mms.pluginsystem.MenuPlugin;
+import mms.Pluginsystem.ControlPlugin;
+import mms.Pluginsystem.MenuPlugin;
 
 public class PluginHost {
 	private final PlayerApp app;

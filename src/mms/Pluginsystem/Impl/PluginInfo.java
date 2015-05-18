@@ -1,4 +1,4 @@
-package mms.pluginsystem.impl;
+package mms.Pluginsystem.Impl;
 
 public class PluginInfo {
 	public final String className;

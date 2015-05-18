@@ -1,4 +1,4 @@
-package mms.view;
+package mms.View;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -11,8 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import mms.pluginsystem.Plugin;
-import mms.pluginsystem.impl.PluginLoader;
+import mms.Pluginsystem.Plugin;
+import mms.Pluginsystem.Impl.PluginLoader;
 
 public class PluginSettingsController {
 	@FXML

@@ -1,6 +1,6 @@
-package mms.pluginsystem;
+package mms.Pluginsystem;
 
-import mms.pluginsystem.impl.PluginHost;
+import mms.Pluginsystem.Impl.PluginHost;
 
 public abstract class Plugin {
 	protected final PluginHost host;

@@ -1,4 +1,4 @@
-package mms.pluginsystem.impl;
+package mms.Pluginsystem.Impl;
 
 import java.util.List;
 

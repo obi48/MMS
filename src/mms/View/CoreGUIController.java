@@ -1,4 +1,4 @@
-package mms.view;
+package mms.View;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;

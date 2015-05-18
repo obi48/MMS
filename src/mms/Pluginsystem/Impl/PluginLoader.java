@@ -1,4 +1,4 @@
-package mms.pluginsystem.impl;
+package mms.Pluginsystem.Impl;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -25,9 +25,9 @@ import javax.xml.bind.UnmarshalException;
 import javax.xml.bind.Unmarshaller;
 
 import mms.PlayerApp;
-import mms.pluginsystem.ControlPlugin;
-import mms.pluginsystem.MenuPlugin;
-import mms.pluginsystem.Plugin;
+import mms.Pluginsystem.ControlPlugin;
+import mms.Pluginsystem.MenuPlugin;
+import mms.Pluginsystem.Plugin;
 
 public class PluginLoader {
 	

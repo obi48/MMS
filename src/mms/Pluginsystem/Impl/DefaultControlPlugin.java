@@ -1,6 +1,6 @@
-package mms.pluginsystem.impl;
+package mms.Pluginsystem.Impl;
 
-import mms.pluginsystem.ControlPlugin;
+import mms.Pluginsystem.ControlPlugin;
 
 public class DefaultControlPlugin extends ControlPlugin {
 

@@ -1,7 +1,7 @@
-package mms.pluginsystem;
+package mms.Pluginsystem;
 
 import javafx.scene.control.Menu;
-import mms.pluginsystem.impl.PluginHost;
+import mms.Pluginsystem.Impl.PluginHost;
 
 public abstract class MenuPlugin extends Plugin {
 

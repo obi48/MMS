@@ -1,9 +1,9 @@
-package mms.pluginsystem.impl;
+package mms.Pluginsystem.Impl;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
-import mms.pluginsystem.MenuPlugin;
+import mms.Pluginsystem.MenuPlugin;
 
 public class DefaultMenuPlugin extends MenuPlugin {
 	private final MenuBar menuBar;
