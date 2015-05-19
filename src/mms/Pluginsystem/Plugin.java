@@ -6,7 +6,7 @@
 package mms.Pluginsystem;
 
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  *
@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 public abstract class Plugin {
 
     protected final PluginHost pluginHost;
-    private final Set<Plugin> listener = new ConcurrentSkipListSet<>();
+    private final Set<Plugin> listener = new CopyOnWriteArraySet<>();
 
     public Plugin(PluginHost pluginHost){
         this.pluginHost = pluginHost;

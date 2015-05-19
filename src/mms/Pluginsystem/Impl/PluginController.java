@@ -24,11 +24,13 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -213,6 +215,10 @@ public class PluginController extends PluginHost implements Initializable {
     public <T extends Event> void removeUIEventFilter(EventType<T> eventType, EventHandler<? super T> eventFilter) {
         anchorPane.removeEventFilter(eventType, eventFilter);
     }
+    
+    @Override
+    public ObservableList<Menu> getMenus() {
+        return menuBar.getMenus();
+    }
     //***********************************************************************/
-
 }

@@ -8,9 +8,11 @@ package mms.Pluginsystem;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.scene.control.Menu;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 
@@ -125,6 +127,14 @@ public abstract class PluginHost {
      */
     public abstract <T extends Event> void removeUIEventHandler(final EventType<T> eventType, final EventHandler<? super T> eventHandler);
 
+    /**
+     * The menus to show within this MenuBar. If this ObservableList is modified
+     * at runtime, the MenuBar will update as expected
+     * 
+     * @return the list of menus
+     */
+    public abstract ObservableList<Menu> getMenus();
+    
     /**
      * Unregisters a previously registered event filter from mainUI - node. One
      * filter might have been registered for different event types, so the
