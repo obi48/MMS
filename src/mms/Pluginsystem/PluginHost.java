@@ -50,7 +50,7 @@ public abstract class PluginHost {
             }
             plugin.addListener(listener);
         } catch (Exception e) {
-            throw new PluginNotFoundException("Plugin with ID \"" + observable.toString() + "\" is not loaded!");
+            throw new PluginNotFoundException("Plugin with ID = \"" + Identifier.toString(observable) + "\" is not loaded!");
         }
     }
 
@@ -130,11 +130,11 @@ public abstract class PluginHost {
     /**
      * The menus to show within this MenuBar. If this ObservableList is modified
      * at runtime, the MenuBar will update as expected
-     * 
+     *
      * @return the list of menus
      */
     public abstract ObservableList<Menu> getMenus();
-    
+
     /**
      * Unregisters a previously registered event filter from mainUI - node. One
      * filter might have been registered for different event types, so the
@@ -168,6 +168,7 @@ public abstract class PluginHost {
          * You need to know the ID from another plugin as integer identifier =
          * hashCode of "DevName,PluginName,Version"
          *
+         * @deprecated it is easier to use Plugin(String)
          * @param identifier as integer
          * @return
          */
@@ -183,6 +184,19 @@ public abstract class PluginHost {
          */
         public static String Plugin(String identifier) {
             return identifier;
+        }
+
+        static String toString(Object id) {
+            if (id instanceof String) {
+                String[] data = ((String) id).split(",");
+                return "Developer [" + data[0] + "], PluginName [" + data[1] + "], Version [" + data[2] + "]";
+            } else if (id instanceof Class) {
+                return ((Class) id).getSimpleName();
+            } else if (id instanceof Integer) {
+                return "" + (int) id;
+            } else {
+                throw new IllegalArgumentException();
+            }
         }
     }
 }
