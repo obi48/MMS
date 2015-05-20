@@ -15,7 +15,7 @@ import javafx.scene.media.MediaView;
  *
  * @author Michael Obermüller
  */
-public abstract class ControlPlugin extends Plugin{
+public abstract class ControlPlugin extends Plugin {
     protected final AnchorPane anchorPane;
     protected final MediaView mediaView;
     
@@ -25,5 +25,6 @@ public abstract class ControlPlugin extends Plugin{
         this.mediaView = mediaView;
     }
     
+    @Override
     public abstract void onMediaPlayerChanged(MediaPlayer player);
 }

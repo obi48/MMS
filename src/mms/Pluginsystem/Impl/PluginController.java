@@ -114,7 +114,7 @@ public class PluginController extends PluginHost implements Initializable {
                 return 0; //TODO define loadorder for all other plugins!
             }
         });
-
+        
         loadedPlugins.stream().forEach(pi -> pi.start());
     }
 
@@ -192,8 +192,18 @@ public class PluginController extends PluginHost implements Initializable {
 
     @Override
     public void setPlayer(MediaPlayer player) {
+        MediaPlayer p;
+        if((p = mediaView.getMediaPlayer()) != null){
+            p.stop();
+        }
         mediaView.setMediaPlayer(player);
+        
+        //Controlplugin is always a mediaplayerlistener!
         controlPlugin.onMediaPlayerChanged(player);
+        
+        playerListener.stream().forEach(plugin -> {
+            plugin.onMediaPlayerChanged(player);
+        });
     }
 
     @Override

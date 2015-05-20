@@ -7,6 +7,8 @@ package mms.Pluginsystem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Stream;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -25,10 +27,14 @@ import javafx.scene.media.MediaPlayer;
 public abstract class PluginHost {
 
     protected final List<Plugin> loadedPlugins = new ArrayList<>();
+    protected final Set<Plugin> playerListener = new CopyOnWriteArraySet<>();
 
     /**
      * Registers your plugin as a listener on arbitrary other plugins
      *
+     * You have to override the following method:
+     * @see Plugin#onEventReceived(java.lang.String, java.lang.Object...) 
+     * 
      * @param listener instance of your plugin
      * @param observable use static Identifier class!
      * @throws mms.Pluginsystem.PluginHost.PluginNotFoundException
@@ -134,6 +140,29 @@ public abstract class PluginHost {
      * @return the list of menus
      */
     public abstract ObservableList<Menu> getMenus();
+    
+    /**
+     * If you want to get informed when the mediaplayer starts to play a new 
+     * media you have to register here!
+     * 
+     * You have to override the following method:
+     * @see Plugin#onMediaPlayerChanged(javafx.scene.media.MediaPlayer) 
+     * 
+     * @param plugin your plugin instance
+     */
+    public void addMediaListener(Plugin plugin){
+        playerListener.add(plugin);
+    }
+    
+    /**
+     * Deregisters your plugin from the mediaListeners
+     * 
+     * @param plugin your plugin instance
+     * @return true if successful
+     */
+    public boolean removeMediaListener(Plugin plugin){
+        return playerListener.remove(plugin);
+    }
 
     /**
      * Unregisters a previously registered event filter from mainUI - node. One

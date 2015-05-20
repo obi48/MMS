@@ -7,6 +7,7 @@ package mms.Pluginsystem;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import javafx.scene.media.MediaPlayer;
 
 /**
  *
@@ -96,6 +97,8 @@ public abstract class Plugin {
         listener.stream().forEach(p -> p.onEventReceived(eventID, args));
     }
 
+    public void onMediaPlayerChanged(MediaPlayer player) {}
+    
     /**
      * Override this method if this Plugin listens to some other plugin(s)
      * 
