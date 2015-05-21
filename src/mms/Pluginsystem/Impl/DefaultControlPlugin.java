@@ -33,7 +33,7 @@ public class DefaultControlPlugin extends ControlPlugin {
 
     private MediaPlayer player;
     private Controller controller;
-    private boolean repeat = false;
+    private boolean repeat = false, mute = false;
     private boolean stopRequested = false;
     private boolean atEndOfMedia = false;
     private Duration duration;
@@ -98,6 +98,8 @@ public class DefaultControlPlugin extends ControlPlugin {
             String title = (String) metaData.get("title");
             String artist = (String) metaData.get("artist");
             controller.marqueeAnimation((artist == null ? "" : artist + " - ") + (title == null ? "" : title));
+            
+            player.setMute(mute);
         });
 
         player.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
@@ -120,26 +122,6 @@ public class DefaultControlPlugin extends ControlPlugin {
             player.setVolume(controller.getVolumeSlider().getValue() / 100.0);
         });
 
-        controller.getCycleButton().setOnAction(ActionEvent -> {
-            if (controller.getCycleButton().isSelected()) {
-                controller.getCycleButton().setEffect(new SepiaTone(1.0));
-                repeat = true;
-            } else {
-                controller.getCycleButton().setEffect(null);
-                repeat = false;
-            }
-            player.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
-        });
-
-        controller.getMuteButton().setOnAction(ActionEvent -> {
-            if (controller.getMuteButton().isSelected()) {
-                controller.getMuteButton().setEffect(new SepiaTone(1.0));
-                player.setMute(true);
-            } else {
-                controller.getMuteButton().setEffect(null);
-                player.setMute(false);
-            }
-        });
     }
 
     @Override
@@ -155,6 +137,32 @@ public class DefaultControlPlugin extends ControlPlugin {
         } catch (IOException ex) {
             Logger.getLogger(DefaultControlPlugin.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        controller.getCycleButton().setOnAction(ActionEvent -> {
+            if (controller.getCycleButton().isSelected()) {
+                controller.getCycleButton().setEffect(new SepiaTone(1.0));
+                repeat = true;
+            } else {
+                controller.getCycleButton().setEffect(null);
+                repeat = false;
+            }
+            if (player != null) {
+                player.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
+            }
+        });
+
+        controller.getMuteButton().setOnAction(ActionEvent -> {
+            if (controller.getMuteButton().isSelected()) {
+                controller.getMuteButton().setEffect(new SepiaTone(1.0));
+                mute = true;
+            } else {
+                controller.getMuteButton().setEffect(null);
+                mute = false;
+            }
+            if (player != null) {
+                player.setMute(mute);
+            }
+        });
 
         FadeTransition fade = new FadeTransition(Duration.seconds(1), controller.getFadePane());
         fade.setFromValue(0);

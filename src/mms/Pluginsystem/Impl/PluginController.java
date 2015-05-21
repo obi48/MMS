@@ -89,8 +89,10 @@ public class PluginController extends PluginHost implements Initializable {
 
     public void start() {
         File[] files = new File("Plugins").listFiles();
-        for (File f : files) {
-            loadPlugin(f);
+        if (files != null) {
+            for (File f : files) {
+                loadPlugin(f);
+            }
         }
 
         //Check if one MenuPlugin is loaded, if not load default one
@@ -111,7 +113,7 @@ public class PluginController extends PluginHost implements Initializable {
                 return 0; //TODO define loadorder for all other plugins!
             }
         });
-        
+
         loadedPlugins.stream().forEach(pi -> pi.start());
     }
 
@@ -125,10 +127,10 @@ public class PluginController extends PluginHost implements Initializable {
         try (JarFile jar = new JarFile(file)) {
             String entryName;
             Enumeration<JarEntry> entries = jar.entries();
-            
+
             //Adds jar to SystemClassPath
             addSoftwareLibrary(file);
-            
+
             while (entries.hasMoreElements()) {
                 entryName = entries.nextElement().getName();
 
@@ -190,14 +192,14 @@ public class PluginController extends PluginHost implements Initializable {
     @Override
     public void setPlayer(MediaPlayer player) {
         MediaPlayer p;
-        if((p = mediaView.getMediaPlayer()) != null){
+        if ((p = mediaView.getMediaPlayer()) != null) {
             p.stop();
         }
         mediaView.setMediaPlayer(player);
-        
+
         //Controlplugin is always a mediaplayerlistener!
         controlPlugin.onMediaPlayerChanged(player);
-        
+
         playerListener.stream().forEach(plugin -> {
             plugin.onMediaPlayerChanged(player);
         });
@@ -222,7 +224,7 @@ public class PluginController extends PluginHost implements Initializable {
     public <T extends Event> void removeUIEventFilter(EventType<T> eventType, EventHandler<? super T> eventFilter) {
         anchorPane.removeEventFilter(eventType, eventFilter);
     }
-    
+
     @Override
     public ObservableList<Menu> getMenus() {
         return menuBar.getMenus();
