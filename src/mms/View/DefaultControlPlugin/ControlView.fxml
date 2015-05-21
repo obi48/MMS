@@ -3,6 +3,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="478.0" prefWidth="851.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mms.View.DefaultControlPlugin.Controller">
     <children>
@@ -26,6 +27,11 @@
                         </FlowPane>
                     </center>
                 </BorderPane>
+            <Pane fx:id="marqueeNode" layoutX="-2.0" layoutY="36.0" prefHeight="27.0" prefWidth="851.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <Text fx:id="marqueeText" fill="#f2eeee" layoutX="10.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+               </children>
+            </Pane>
             </children>
         </AnchorPane>
     </children>

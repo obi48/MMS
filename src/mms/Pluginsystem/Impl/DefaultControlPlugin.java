@@ -6,12 +6,14 @@
 package mms.Pluginsystem.Impl;
 
 import java.io.IOException;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
 import javafx.beans.Observable;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -95,6 +97,13 @@ public class DefaultControlPlugin extends ControlPlugin {
         player.setOnReady(() -> {
             duration = player.getMedia().getDuration();
             controller.updateValues(player, duration);
+
+            ObservableMap<String, Object> metaData = player.getMedia().getMetadata();
+
+            //Metadata marquee animation
+            String title = (String) metaData.get("title");
+            String artist = (String) metaData.get("artist");
+            controller.marqueeAnimation((artist == null ? "" : artist + " - ") + (title == null ? "" : title));
         });
 
         player.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);

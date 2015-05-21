@@ -7,7 +7,16 @@ package mms.View.DefaultControlPlugin;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
+import javafx.animation.TranslateTransitionBuilder;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -16,7 +25,9 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
@@ -41,11 +52,52 @@ public class Controller implements Initializable {
     private AnchorPane fadePane;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private Pane marqueeNode;
+    @FXML
+    private Text marqueeText;
+
+    private final double SPEED_FACTOR = 0.07;
+    private TranslateTransition transition;
+    private final Timeline textMaquee = new Timeline(80);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         volumeSlider.setTooltip(new Tooltip("Volume"));
         timeSlider.setTooltip(new Tooltip("Search bar"));
+
+//        transition = new TranslateTransition(new Duration(5), marqueeText);
+//        transition.setInterpolator(Interpolator.LINEAR);
+//        transition.setCycleCount(1);
+//
+//        transition.setOnFinished((ActionEvent actionEvent) -> {
+//            rerunAnimation(marqueeText.getText());
+//        });
+//
+//        rerunAnimation("Sylver - Skin");
+        // Create an indefinite time line.
+        textMaquee.getKeyFrames().addAll(
+                new KeyFrame(Duration.ZERO),
+                new KeyFrame(Duration.INDEFINITE)
+        );
+
+        // Hook up a listener to the time line which triggers all object updates.
+        textMaquee.currentTimeProperty().addListener((ObservableValue<? extends Duration> observable, Duration oldValue, Duration newValue) -> {
+            double x = marqueeText.getTranslateX();
+            if (x > -marqueeText.getBoundsInLocal().getMaxX() - 15) {
+                marqueeText.setTranslateX(x - 0.5);
+            } else {
+                marqueeText.setTranslateX(marqueeNode.getBoundsInLocal().getMaxX() + 15);
+            }
+        });
+    }
+
+    public void marqueeAnimation(String s) {
+        textMaquee.stop();
+        marqueeText.setText(s);
+        if (s != null && !s.isEmpty()) {
+            textMaquee.playFromStart();
+        }
     }
 
     public AnchorPane getFadePane() {
