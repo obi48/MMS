@@ -7,8 +7,6 @@ package mms.Pluginsystem.Impl;
 
 import java.io.File;
 import javafx.animation.FadeTransition;
-import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -53,6 +51,7 @@ public class DefaultMenuPlugin extends MenuPlugin {
             fade.playFromStart();
         });
 
+        //Drag and drop files support
         pluginHost.addUIEventFilter(DragEvent.DRAG_OVER, (DragEvent event) -> {
             Dragboard db = event.getDragboard();
             if (db.hasFiles()) {
@@ -61,7 +60,6 @@ public class DefaultMenuPlugin extends MenuPlugin {
                 event.consume();
             }
         });
-
         pluginHost.addUIEventFilter(DragEvent.DRAG_DROPPED, (DragEvent event) -> {
             Dragboard db = event.getDragboard();
             boolean success = false;
@@ -77,6 +75,8 @@ public class DefaultMenuPlugin extends MenuPlugin {
             event.setDropCompleted(success);
             event.consume();
         });
+        
+        
 
         return true;
     }
@@ -89,7 +89,7 @@ public class DefaultMenuPlugin extends MenuPlugin {
 
     @Override
     public String getDeveloper() {
-        return "MMS_Team";
+        return "AOPP Studios";
     }
 
     @Override

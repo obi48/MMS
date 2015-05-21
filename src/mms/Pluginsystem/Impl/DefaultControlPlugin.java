@@ -6,19 +6,13 @@
 package mms.Pluginsystem.Impl;
 
 import java.io.IOException;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
-import javafx.beans.Observable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.effect.Effect;
 import javafx.scene.effect.SepiaTone;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -208,7 +202,7 @@ public class DefaultControlPlugin extends ControlPlugin {
 
     @Override
     public String getDeveloper() {
-        return "MMS Team";
+        return "AOPP Studios";
     }
 
     @Override
