@@ -7,12 +7,9 @@ package mms.Pluginsystem.Impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -25,11 +22,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
-import javafx.stage.PopupBuilder;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import mms.Pluginsystem.MenuPlugin;
@@ -109,7 +102,7 @@ public class DefaultMenuPlugin extends MenuPlugin {
         aboutItem.setOnAction(ActionEvent -> {
             try {
                 Pane root = FXMLLoader.load(getClass().getClassLoader().getResource("mms/View/DefaultMenuPlugin/AboutView.fxml"));
-                
+
                 Scene scene = new Scene(root);
                 Stage newStage = new Stage();
                 newStage.setScene(scene);
@@ -121,8 +114,6 @@ public class DefaultMenuPlugin extends MenuPlugin {
             }
         });
 
-//        MenuItem openFileItem = fileMenu.getItems().stream().filter(R -> R.getText().equals("Open File...")).findFirst().get();
-//        openFileItem.setOnAction((ActionEvent event) -> {
 //            FileChooser fileChooser = new FileChooser();
 //            fileChooser.setTitle("Open Media File");
 //            fileChooser.getExtensionFilters().addAll(
@@ -130,8 +121,6 @@ public class DefaultMenuPlugin extends MenuPlugin {
 //                    new ExtensionFilter("Video Files", "*.fxm", "*.flv", "*.mp4", "*.m4v"),
 //                    new ExtensionFilter("All supported Files", "*.mp3", "*.aif", "*.aiff", "*.wav", "*.fxm", "*.flv", "*.mp4", "*.m4v"));
 //            List<File> selectedFiles = fileChooser.showOpenMultipleDialog(menu.getContextMenu());
-//            
-//        });
         return true;
     }
 

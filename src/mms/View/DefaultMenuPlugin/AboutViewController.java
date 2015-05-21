@@ -35,8 +35,5 @@ public class AboutViewController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(AboutViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
     }    
-    
 }
