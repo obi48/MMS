@@ -13,6 +13,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
@@ -25,17 +28,32 @@ public class Controller implements Initializable {
     @FXML
     private Slider volumeSlider;
     @FXML
-    private Button muteButton;
+    private ToggleButton muteButton;
     @FXML
     private Button playButton;
     @FXML
     private Slider timeSlider;
     @FXML
     private Label playTime;
+    @FXML
+    private ToggleButton cycleButton;
+    @FXML
+    private AnchorPane fadePane;
+    @FXML
+    private AnchorPane anchorPane;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        volumeSlider.setTooltip(new Tooltip("Volume"));
+        timeSlider.setTooltip(new Tooltip("Search bar"));
+    }
 
+    public AnchorPane getFadePane() {
+        return fadePane;
+    }
+
+    public ToggleButton getCycleButton() {
+        return cycleButton;
     }
 
     public Slider getTimeSlider() {
@@ -46,7 +64,7 @@ public class Controller implements Initializable {
         return volumeSlider;
     }
 
-    public Button getMuteButton() {
+    public ToggleButton getMuteButton() {
         return muteButton;
     }
 
@@ -73,7 +91,7 @@ public class Controller implements Initializable {
             });
         }
     }
-    
+
     private static String formatTime(Duration elapsed, Duration duration) {
         int intElapsed = (int) Math.floor(elapsed.toSeconds());
         int elapsedHours = intElapsed / (60 * 60);

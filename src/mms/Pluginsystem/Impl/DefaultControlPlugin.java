@@ -8,9 +8,17 @@ package mms.Pluginsystem.Impl;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.FadeTransition;
 import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.SepiaTone;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
@@ -29,7 +37,7 @@ public class DefaultControlPlugin extends ControlPlugin {
 
     private MediaPlayer player;
     private Controller controller;
-    private final boolean repeat = false;
+    private boolean repeat = false;
     private boolean stopRequested = false;
     private boolean atEndOfMedia = false;
     private Duration duration;
@@ -66,7 +74,7 @@ public class DefaultControlPlugin extends ControlPlugin {
             }
         });
 
-        player.currentTimeProperty().addListener((Observable ov) -> {
+        player.currentTimeProperty().addListener(Observable -> {
             controller.updateValues(player, duration);
         });
 
@@ -98,16 +106,35 @@ public class DefaultControlPlugin extends ControlPlugin {
             }
         });
 
-        controller.getTimeSlider().valueProperty().addListener((Observable ov) -> {
-            if (controller.getTimeSlider().isValueChanging()) {
+        controller.getTimeSlider().valueProperty().addListener((Observable, oldValue, newValue) -> {
+            if (controller.getTimeSlider().isValueChanging() || Math.abs(oldValue.doubleValue() - newValue.doubleValue()) > 1) {
                 // multiply duration by percentage calculated by slider position
                 player.seek(duration.multiply(controller.getTimeSlider().getValue() / 100.0));
             }
         });
 
-        controller.getVolumeSlider().valueProperty().addListener((Observable ov) -> {
-            if (controller.getVolumeSlider().isValueChanging()) {
-                player.setVolume(controller.getVolumeSlider().getValue() / 100.0);
+        controller.getVolumeSlider().valueProperty().addListener(Observable -> {
+            player.setVolume(controller.getVolumeSlider().getValue() / 100.0);
+        });
+
+        controller.getCycleButton().setOnAction(ActionEvent -> {
+            if (controller.getCycleButton().isSelected()) {
+                controller.getCycleButton().setEffect(new SepiaTone(1.0));
+                repeat = true;
+            } else {
+                controller.getCycleButton().setEffect(null);
+                repeat = false;
+            }
+            player.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
+        });
+
+        controller.getMuteButton().setOnAction(ActionEvent -> {
+            if (controller.getMuteButton().isSelected()) {
+                controller.getMuteButton().setEffect(new SepiaTone(1.0));
+                player.setMute(true);
+            } else {
+                controller.getMuteButton().setEffect(null);
+                player.setMute(false);
             }
         });
     }
@@ -126,6 +153,41 @@ public class DefaultControlPlugin extends ControlPlugin {
             Logger.getLogger(DefaultControlPlugin.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        FadeTransition fade = new FadeTransition(Duration.seconds(1), controller.getFadePane());
+        fade.setFromValue(0);
+        fade.setToValue(0);
+        fade.playFromStart();
+
+        EventHandler<MouseEvent> event = MouseEvent -> {
+            fade.setDelay(Duration.seconds(0));
+            fade.setFromValue(1);
+            fade.setToValue(1);
+            fade.playFromStart();
+            fade.setOnFinished(ActionEvent -> {
+                fade.setOnFinished(null);
+                fade.setDelay(Duration.seconds(4));
+                fade.setFromValue(1);
+                fade.setToValue(0);
+                fade.playFromStart();
+            });
+        };
+
+        pluginHost.addUIEventFilter(MouseEvent.MOUSE_MOVED, event);
+
+        controller.getFadePane().addEventHandler(MouseEvent.MOUSE_ENTERED, MouseEvent -> {
+            pluginHost.removeUIEventFilter(MouseEvent.MOUSE_MOVED, event);
+            fade.setOnFinished(null);
+            fade.setDelay(Duration.seconds(0));
+            fade.setFromValue(1);
+            fade.setToValue(1);
+            fade.playFromStart();
+        });
+
+        controller.getFadePane().addEventHandler(MouseEvent.MOUSE_EXITED, MouseEvent -> {
+            pluginHost.addUIEventFilter(MouseEvent.MOUSE_MOVED, event);
+            event.handle(null);
+        });
+
         return true;
     }
 
@@ -137,21 +199,21 @@ public class DefaultControlPlugin extends ControlPlugin {
 
     @Override
     public String getDeveloper() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "MMS Team";
     }
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return DefaultControlPlugin.class.getSimpleName();
     }
 
     @Override
     public String getVersion() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "1.0";
     }
 
     @Override
     public String getDescription() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "This plugin implements default mediaplayer-controls";
     }
 }
