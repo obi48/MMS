@@ -32,7 +32,7 @@ public class Main extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("AOPP Studios Media Player");
-        stage.getIcons().add(new Image(getClass().getClassLoader().getResource("mms/View/DefaultMenuPlugin/logo.png").openStream()));
+        stage.getIcons().add(new Image(getClass().getClassLoader().getResource("assets/logo.png").openStream()));
         stage.show();
     }
 }

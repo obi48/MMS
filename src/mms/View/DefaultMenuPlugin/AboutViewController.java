@@ -31,7 +31,7 @@ public class AboutViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            logoView.setImage(new Image(getClass().getClassLoader().getResource("mms/View/DefaultMenuPlugin/logo.png").openStream()));
+            logoView.setImage(new Image(getClass().getClassLoader().getResource("assets/logo.png").openStream()));
         } catch (IOException ex) {
             Logger.getLogger(AboutViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
