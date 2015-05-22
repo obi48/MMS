@@ -9,6 +9,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -30,6 +31,8 @@ public class Main extends Application {
         
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setTitle("AOPP Studios Media Player");
+        stage.getIcons().add(new Image(getClass().getClassLoader().getResource("mms/View/DefaultMenuPlugin/logo.png").openStream()));
         stage.show();
     }
 }
