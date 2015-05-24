@@ -99,7 +99,7 @@ public class Controller implements Initializable {
         });
     }
 
-    public void marqueeAnimation(String s) {
+    public boolean marqueeAnimation(String s) {
         textMaqueeTimer.stop();
         marqueeText.setTranslateX(marqueeNode.getBoundsInLocal().getMaxX() / 2.);
         marqueeText.setText(s);
@@ -109,6 +109,10 @@ public class Controller implements Initializable {
             fade.setFromValue(0);
             fade.setToValue(1);
             fade.playFromStart();
+            return true;
+        }
+        else{
+            return false;
         }
     }
 

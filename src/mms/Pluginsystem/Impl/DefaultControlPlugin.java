@@ -6,6 +6,8 @@
 package mms.Pluginsystem.Impl;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
@@ -92,8 +94,17 @@ public class DefaultControlPlugin extends ControlPlugin {
             //Metadata marquee animation
             String title = (String) metaData.get("title");
             String artist = (String) metaData.get("artist");
-            controller.marqueeAnimation((artist == null ? "" : artist + " - ") + (title == null ? "" : title));
-
+            
+            //check if we can build a marqueeAnimation (we cannot build if string is empty (no metadata)
+            if(!controller.marqueeAnimation((artist == null ? "" : artist + " - ") + (title == null ? "" : title))){
+                try {
+                    String srcPath = new URI(player.getMedia().getSource()).getPath();
+                    controller.marqueeAnimation(srcPath.substring(srcPath.lastIndexOf("/")+1));
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(DefaultControlPlugin.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
             player.setMute(mute);
         });
 
