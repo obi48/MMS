@@ -29,7 +29,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -55,8 +54,6 @@ public class PluginController extends PluginHost implements Initializable {
     private MenuBar menuBar;
     @FXML
     private AnchorPane anchorPane;
-    @FXML
-    private MenuItem openFileMenuItem;
 
     private ControlPlugin controlPlugin;
     private boolean loadedControl = false, loadedMenu = false;

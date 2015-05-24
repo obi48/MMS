@@ -65,26 +65,21 @@ public class DefaultControlPlugin extends ControlPlugin {
                     atEndOfMedia = false;
                 }
                 player.play();
+
             } else {
                 player.pause();
             }
         });
 
-        player.currentTimeProperty().addListener(Observable -> {
+        player.currentTimeProperty().addListener((observableValue, oldDuration, newDuration) -> {
             controller.updateValues(player, duration);
         });
-
+        
         player.setOnPlaying(() -> {
-            if (stopRequested) {
-                player.pause();
-                stopRequested = false;
-            } else {
-                controller.getPlayButton().setText("Pause");
-            }
+            controller.getPlayButton().setText("Pause");
         });
 
         player.setOnPaused(() -> {
-            System.out.println("onPaused");
             controller.getPlayButton().setText("Play");
         });
 
@@ -98,7 +93,7 @@ public class DefaultControlPlugin extends ControlPlugin {
             String title = (String) metaData.get("title");
             String artist = (String) metaData.get("artist");
             controller.marqueeAnimation((artist == null ? "" : artist + " - ") + (title == null ? "" : title));
-            
+
             player.setMute(mute);
         });
 
@@ -108,6 +103,8 @@ public class DefaultControlPlugin extends ControlPlugin {
                 controller.getPlayButton().setText("Play");
                 stopRequested = true;
                 atEndOfMedia = true;
+                player.seek(Duration.ZERO);
+                player.stop();
             }
         });
 
