@@ -102,7 +102,7 @@ public abstract class PluginHost {
      * With this method it is possible to play new media-files
      *
      * @param player with new mediafile
-     * @deprecated 
+     * @deprecated please use pluginHost.setMedia(URI src) instead!
      */
     public abstract void setPlayer(MediaPlayer player);
     
