@@ -97,6 +97,19 @@ public class Controller implements Initializable {
                 }
             }
         });
+
+        playTime.textProperty().addListener((ObservableValue<? extends String> ob, String o, String n) -> {
+            Platform.runLater(() -> {
+                Text text = new Text(playTime.getText());
+                text.setFont(playTime.getFont()); // Set the same font, so the size is the same
+
+                double width = text.getLayoutBounds().getWidth() // This big is the Text in the TextField
+                        + playTime.getPadding().getLeft() + playTime.getPadding().getRight() // Add the padding of the TextField
+                        + 2d; // Add some spacing
+
+                playTime.setMinWidth(width); // Set the width
+            });
+        });
     }
 
     public boolean marqueeAnimation(String s) {
@@ -110,8 +123,7 @@ public class Controller implements Initializable {
             fade.setToValue(1);
             fade.playFromStart();
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
@@ -170,7 +182,7 @@ public class Controller implements Initializable {
         int elapsedSeconds = intElapsed - elapsedHours * 60 * 60
                 - elapsedMinutes * 60;
 
-        if (duration.greaterThan(Duration.ZERO)) {
+        if (duration.greaterThan(Duration.ZERO) && !duration.isIndefinite()) {
             int intDuration = (int) Math.floor(duration.toSeconds());
             int durationHours = intDuration / (60 * 60);
             if (durationHours > 0) {

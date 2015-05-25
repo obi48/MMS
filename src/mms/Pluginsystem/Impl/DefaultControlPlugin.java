@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.effect.SepiaTone;
@@ -35,10 +36,11 @@ public class DefaultControlPlugin extends ControlPlugin {
 
     private MediaPlayer player;
     private Controller controller;
-    private boolean repeat = false, mute = false;
-    private boolean stopRequested = false;
+    private EventHandler<MouseEvent> event;
+    private boolean repeat = false, mute = false, hideEffects = false;
     private boolean atEndOfMedia = false;
     private Duration duration;
+    private FadeTransition fade;
 
     public DefaultControlPlugin(PluginHost pluginHost, AnchorPane pane, MediaView mediaView) {
         super(pluginHost, pane, mediaView);
@@ -76,13 +78,19 @@ public class DefaultControlPlugin extends ControlPlugin {
         player.currentTimeProperty().addListener((observableValue, oldDuration, newDuration) -> {
             controller.updateValues(player, duration);
         });
-        
+
         player.setOnPlaying(() -> {
             controller.getPlayButton().setText("Pause");
+            setControlHideEffects(true);
         });
 
         player.setOnPaused(() -> {
             controller.getPlayButton().setText("Play");
+            setControlHideEffects(false);
+        });
+        
+        player.setOnStopped(() -> {
+            setControlHideEffects(false);
         });
 
         player.setOnReady(() -> {
@@ -94,17 +102,23 @@ public class DefaultControlPlugin extends ControlPlugin {
             //Metadata marquee animation
             String title = (String) metaData.get("title");
             String artist = (String) metaData.get("artist");
-            
-            //check if we can build a marqueeAnimation (we cannot build if string is empty (no metadata)
-            if(!controller.marqueeAnimation((artist == null ? "" : artist + " - ") + (title == null ? "" : title))){
-                try {
-                    String srcPath = new URI(player.getMedia().getSource()).getPath();
-                    controller.marqueeAnimation(srcPath.substring(srcPath.lastIndexOf("/")+1));
-                } catch (URISyntaxException ex) {
-                    Logger.getLogger(DefaultControlPlugin.class.getName()).log(Level.SEVERE, null, ex);
+
+            if (!duration.isIndefinite()) {
+                //check if we can build a marqueeAnimation (we cannot build if string is empty (no metadata)
+                if (!controller.marqueeAnimation((artist == null ? "" : artist + " - ") + (title == null ? "" : title))) {
+                    try {
+                        String srcPath = new URI(player.getMedia().getSource()).getPath();
+                        controller.marqueeAnimation(srcPath.substring(srcPath.lastIndexOf("/") + 1));
+                    } catch (URISyntaxException ex) {
+                        Logger.getLogger(DefaultControlPlugin.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
+                controller.getCycleButton().setVisible(true);
+            } else {
+                controller.marqueeAnimation("Stream");
+                controller.getCycleButton().setVisible(false);
             }
-            
+
             player.setMute(mute);
         });
 
@@ -112,7 +126,6 @@ public class DefaultControlPlugin extends ControlPlugin {
         player.setOnEndOfMedia(() -> {
             if (!repeat) {
                 controller.getPlayButton().setText("Play");
-                stopRequested = true;
                 atEndOfMedia = true;
                 player.seek(Duration.ZERO);
                 player.stop();
@@ -172,12 +185,9 @@ public class DefaultControlPlugin extends ControlPlugin {
             }
         });
 
-        FadeTransition fade = new FadeTransition(Duration.seconds(1), controller.getFadePane());
-        fade.setFromValue(0);
-        fade.setToValue(0);
-        fade.playFromStart();
+        fade = new FadeTransition(Duration.seconds(1), controller.getFadePane());
 
-        EventHandler<MouseEvent> event = MouseEvent -> {
+        event = MouseEvent -> {
             fade.setDelay(Duration.seconds(0));
             fade.setFromValue(1);
             fade.setToValue(1);
@@ -191,23 +201,37 @@ public class DefaultControlPlugin extends ControlPlugin {
             });
         };
 
-        pluginHost.addUIEventFilter(MouseEvent.MOUSE_MOVED, event);
+        if (player != null && player.getStatus() == Status.PLAYING) {
+            pluginHost.addUIEventFilter(MouseEvent.MOUSE_MOVED, event);
+        }
 
         controller.getFadePane().addEventHandler(MouseEvent.MOUSE_ENTERED, MouseEvent -> {
+            setControlHideEffects(false);
+        });
+
+        controller.getFadePane().addEventHandler(MouseEvent.MOUSE_EXITED, MouseEvent -> {
+            if (player != null && player.getStatus() == Status.PLAYING) {
+                setControlHideEffects(true);
+            }
+        });
+
+        return true;
+    }
+
+    private void setControlHideEffects(boolean b) {
+        if (!hideEffects && b) {
+            pluginHost.addUIEventFilter(MouseEvent.MOUSE_MOVED, event);
+            event.handle(null);
+            hideEffects = true;
+        } else if (hideEffects && !b) {
             pluginHost.removeUIEventFilter(MouseEvent.MOUSE_MOVED, event);
             fade.setOnFinished(null);
             fade.setDelay(Duration.seconds(0));
             fade.setFromValue(1);
             fade.setToValue(1);
             fade.playFromStart();
-        });
-
-        controller.getFadePane().addEventHandler(MouseEvent.MOUSE_EXITED, MouseEvent -> {
-            pluginHost.addUIEventFilter(MouseEvent.MOUSE_MOVED, event);
-            event.handle(null);
-        });
-
-        return true;
+            hideEffects = false;
+        }
     }
 
     @Override

@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="478.0" prefWidth="851.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mms.View.DefaultControlPlugin.Controller">
     <children>
-        <AnchorPane fx:id="fadePane" layoutY="427.0" prefHeight="86.0" prefWidth="851.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <AnchorPane fx:id="fadePane" layoutY="427.0" prefHeight="85.0" prefWidth="851.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>
-                <Slider fx:id="timeSlider" layoutX="14.0" layoutY="65.0" prefHeight="14.0" prefWidth="755.0" AnchorPane.bottomAnchor="36.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="90.0" />
-                <Label fx:id="playTime" layoutX="759.0" layoutY="64.0" prefHeight="17.0" prefWidth="73.0" text="00:00/00:00" textFill="#eee8e8" AnchorPane.bottomAnchor="34.0" AnchorPane.rightAnchor="5.0" />
+            <HBox layoutX="3.0" layoutY="35.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="10.0">
+               <children>
+                      <Slider fx:id="timeSlider" layoutX="14.0" layoutY="65.0" prefHeight="14.0" prefWidth="770.0" AnchorPane.bottomAnchor="36.0" AnchorPane.leftAnchor="6.0" HBox.hgrow="ALWAYS" />
+                      <Label fx:id="playTime" layoutX="759.0" layoutY="64.0" text="00:00/00:00" textFill="#eee8e8" AnchorPane.bottomAnchor="34.0" AnchorPane.rightAnchor="5.0" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin></Label>
+               </children>
+            </HBox>
                 <BorderPane layoutX="1.0" layoutY="79.0" prefHeight="27.0" prefWidth="850.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                     <center>
                         <FlowPane alignment="CENTER" layoutX="160.0" layoutY="259.0" prefHeight="56.0" prefWidth="522.0" BorderPane.alignment="CENTER">

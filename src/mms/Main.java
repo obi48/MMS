@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import mms.Pluginsystem.Impl.PluginController;
 
 /**
  *
@@ -27,7 +28,12 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
 
         //Load GUI
-        Pane root = (Pane) FXMLLoader.load(getClass().getClassLoader().getResource("mms/View/GUI.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("mms/View/GUI.fxml"));
+        Pane root = (Pane) loader.load();
+        
+        //Get controller
+        PluginController controller = loader.getController();
+        controller.setPrimaryStage(stage);
         
         Scene scene = new Scene(root);
         stage.setScene(scene);

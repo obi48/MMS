@@ -29,11 +29,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.Stage;
 import mms.Pluginsystem.ControlPlugin;
 import mms.Pluginsystem.MenuPlugin;
 import mms.Pluginsystem.Plugin;
@@ -56,8 +59,8 @@ public class PluginController extends PluginHost implements Initializable {
     private AnchorPane anchorPane;
 
     private ControlPlugin controlPlugin;
+    private Stage primaryStage;
     private boolean loadedControl = false, loadedMenu = false;
-    
 
     /**
      * Initializes the controller class.
@@ -67,7 +70,6 @@ public class PluginController extends PluginHost implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         DoubleProperty width = mediaView.fitWidthProperty();
         DoubleProperty height = mediaView.fitHeightProperty();
 
@@ -84,6 +86,19 @@ public class PluginController extends PluginHost implements Initializable {
             @Override
             public void run() {
                 manager.stop();
+            }
+        });
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+
+        //On mouse double click switch to fullscreenmode
+        anchorPane.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+                if (event.getClickCount() == 2) {
+                    primaryStage.setFullScreen(!primaryStage.isFullScreen());
+                }
             }
         });
     }
