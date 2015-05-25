@@ -179,7 +179,7 @@ public abstract class PluginHost {
      */
     public boolean removeMediaListener(Plugin plugin){
         return playerListener.remove(plugin);
-    }
+    } 
 
     /**
      * Unregisters a previously registered event filter from mainUI - node. One
