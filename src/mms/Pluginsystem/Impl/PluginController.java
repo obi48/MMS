@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Enumeration;
@@ -21,12 +22,15 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseButton;
@@ -34,6 +38,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaErrorEvent;
+import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
@@ -96,7 +103,7 @@ public class PluginController extends PluginHost implements Initializable {
         //On mouse double click switch to fullscreenmode
         anchorPane.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
             if (event.getButton().equals(MouseButton.PRIMARY)) {
-                if (event.getClickCount() == 2) {
+                if (!event.isConsumed() && event.getClickCount() == 2) {
                     primaryStage.setFullScreen(!primaryStage.isFullScreen());
                 }
             }
@@ -223,6 +230,32 @@ public class PluginController extends PluginHost implements Initializable {
     }
 
     @Override
+    public void setMedia(URI mediaURI) throws MediaException {
+        try {
+            Media media = new Media(mediaURI.toString());
+            MediaPlayer player = new MediaPlayer(media);
+
+            MediaPlayer p;
+            if ((p = mediaView.getMediaPlayer()) != null) {
+                p.stop();
+                player.setVolume(mediaView.getMediaPlayer().getVolume());
+            }
+            mediaView.setMediaPlayer(player);
+
+            //Controlplugin is always a mediaplayerlistener!
+            controlPlugin.onMediaPlayerChanged(player);
+
+            playerListener.stream().forEach(plugin -> {
+                plugin.onMediaPlayerChanged(player);
+            });
+        } catch (MediaException e) {            
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            alert.show();
+            throw e;
+        }
+    }
+
+    @Override
     public <T extends Event> void addUIEventHandler(EventType<T> eventType, EventHandler<? super T> eventHandler) {
         anchorPane.addEventHandler(eventType, eventHandler);
     }
@@ -245,6 +278,16 @@ public class PluginController extends PluginHost implements Initializable {
     @Override
     public ObservableList<Menu> getMenus() {
         return menuBar.getMenus();
+    }
+
+    @Override
+    public void addMediaErrorHandler(ChangeListener<EventHandler<MediaErrorEvent>> handler) {
+        mediaView.onErrorProperty().addListener(handler);
+    }
+
+    @Override
+    public void removeMediaErrorHandler(ChangeListener<EventHandler<MediaErrorEvent>> handler) {
+        mediaView.onErrorProperty().removeListener(handler);
     }
     //***********************************************************************/
 }

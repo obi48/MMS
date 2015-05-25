@@ -5,17 +5,23 @@
  */
 package mms.Pluginsystem;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Stream;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaErrorEvent;
+import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 
 /**
@@ -96,8 +102,19 @@ public abstract class PluginHost {
      * With this method it is possible to play new media-files
      *
      * @param player with new mediafile
+     * @deprecated 
      */
     public abstract void setPlayer(MediaPlayer player);
+    
+    /**
+     * With this method it is possible to play new Media-Files, the user will be
+     * informed by an AltertMessage if an error occurs. Throws the MediaException
+     * again, you may catch it to do further errorhandling...
+     * 
+     * @param src the URI to the new media-Source
+     * @throws MediaException (RuntimeException)
+     */
+    public abstract void setMedia(URI src) throws MediaException;
 
     /**
      * Registers an event handler to mainUI - node. The handler is called when
@@ -145,7 +162,7 @@ public abstract class PluginHost {
      * If you want to get informed when the mediaplayer starts to play a new 
      * media you have to register here!
      * 
-     * You have to override the following method:
+     * You have to override the following "see also" method:
      * @see Plugin#onMediaPlayerChanged(javafx.scene.media.MediaPlayer) 
      * 
      * @param plugin your plugin instance
@@ -176,6 +193,19 @@ public abstract class PluginHost {
      */
     public abstract <T extends Event> void removeUIEventFilter(final EventType<T> eventType, final EventHandler<? super T> eventFilter);
 
+    /**
+     * If you want to listen on Errors of reading Media... (Errors from the
+     * Mediaview)
+     * @param handler your Errorhandler
+     */
+    public abstract void addMediaErrorHandler(ChangeListener<EventHandler<MediaErrorEvent>> handler);
+    
+    /**
+     * Unregisters a previously registered EventListener
+     * @param handler your Errorhandler
+     */
+    public abstract void removeMediaErrorHandler(ChangeListener<EventHandler<MediaErrorEvent>> handler);
+    
     public final class PluginNotFoundException extends RuntimeException {
 
         public PluginNotFoundException(String message) {

@@ -11,6 +11,8 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -20,6 +22,7 @@ import javafx.scene.effect.SepiaTone;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.MediaErrorEvent;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
@@ -142,6 +145,10 @@ public class DefaultControlPlugin extends ControlPlugin {
         controller.getVolumeSlider().valueProperty().addListener(Observable -> {
             player.setVolume(controller.getVolumeSlider().getValue() / 100.0);
         });
+        
+        player.setOnError(() -> {
+            System.out.println("Error");
+        });
 
     }
 
@@ -213,8 +220,7 @@ public class DefaultControlPlugin extends ControlPlugin {
             if (player != null && player.getStatus() == Status.PLAYING) {
                 setControlHideEffects(true);
             }
-        });
-
+        });        
         return true;
     }
 

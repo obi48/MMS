@@ -78,7 +78,10 @@ public class DefaultMenuPlugin extends MenuPlugin {
                 String filePath = null;
                 for (File file : db.getFiles()) {
                     filePath = file.toURI().toString();
-                    pluginHost.setPlayer(new MediaPlayer(new Media(filePath)));
+
+                    
+
+                    pluginHost.setMedia(file.toURI());
                     System.out.println(filePath);
                 }
             }
