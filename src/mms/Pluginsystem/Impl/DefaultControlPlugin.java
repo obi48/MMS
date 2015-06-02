@@ -11,18 +11,14 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FadeTransition;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.effect.SepiaTone;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.MediaErrorEvent;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
@@ -50,8 +46,7 @@ public class DefaultControlPlugin extends ControlPlugin {
     }
 
     @Override
-    public void onMediaPlayerChanged(MediaPlayer player) {
-        System.out.println("Media changed event");
+    public void onMediaPlayerChanged(MediaPlayer player) {  
         this.player = player;
         player.play();
 
@@ -147,14 +142,13 @@ public class DefaultControlPlugin extends ControlPlugin {
         });
         
         player.setOnError(() -> {
-            System.out.println("Error");
+            Logger.getGlobal().severe("MediaPlayer error!");
         });
-
     }
 
     @Override
     public boolean start() {
-        System.out.println("ControlPlugin started");
+        Logger.getGlobal().info("ControlPlugin started");
 
         FXMLLoader fxmlLoader = new FXMLLoader();
 
@@ -242,7 +236,7 @@ public class DefaultControlPlugin extends ControlPlugin {
 
     @Override
     public boolean stop() {
-        System.out.println("ControlPlugin stopped");
+        Logger.getGlobal().info("ControlPlugin stopped");
         return true;
     }
 

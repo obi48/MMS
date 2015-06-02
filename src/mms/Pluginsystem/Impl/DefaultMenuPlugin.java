@@ -40,7 +40,7 @@ public class DefaultMenuPlugin extends MenuPlugin {
 
     @Override
     public boolean start() {
-        System.out.println("MenuPlugin started");
+        Logger.getGlobal().info("MenuPlugin started");
 
         FadeTransition fade = new FadeTransition(Duration.seconds(1), menu);
         fade.setFromValue(0);
@@ -78,11 +78,8 @@ public class DefaultMenuPlugin extends MenuPlugin {
                 String filePath = null;
                 for (File file : db.getFiles()) {
                     filePath = file.toURI().toString();
-
                     
-
                     pluginHost.setMedia(file.toURI());
-                    System.out.println(filePath);
                 }
             }
             event.setDropCompleted(success);
@@ -129,7 +126,7 @@ public class DefaultMenuPlugin extends MenuPlugin {
 
     @Override
     public boolean stop() {
-        System.out.println("MenuPlugin stopped");
+        Logger.getGlobal().info("MenuPlugin stopped");
         return true;
     }
 

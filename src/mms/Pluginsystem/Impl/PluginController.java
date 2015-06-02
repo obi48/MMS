@@ -231,6 +231,8 @@ public class PluginController extends PluginHost implements Initializable {
 
     @Override
     public void setMedia(URI mediaURI) throws MediaException {
+        Logger.getGlobal().log(Level.INFO, "Media changed Event: {0}", mediaURI.toString());
+
         try {
             Media media = new Media(mediaURI.toString());
             MediaPlayer player = new MediaPlayer(media);
@@ -248,7 +250,7 @@ public class PluginController extends PluginHost implements Initializable {
             playerListener.stream().forEach(plugin -> {
                 plugin.onMediaPlayerChanged(player);
             });
-        } catch (MediaException e) {            
+        } catch (MediaException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage());
             alert.show();
             throw e;
