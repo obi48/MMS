@@ -22,6 +22,7 @@ import java.util.logging.SimpleFormatter;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -53,7 +54,7 @@ public class Main extends Application {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
-        
+
         Logger.getGlobal().info("Starting application...");
 
         try {
@@ -61,25 +62,31 @@ public class Main extends Application {
             launch(args);
         } catch (Exception ex) {
             logger.log(Level.SEVERE, null, ex);
-            System.exit(0);
+            Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage());
+            alert.show();
         }
     }
 
     @Override
     public void start(Stage stage) throws IOException {
-        //Load GUI
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("mms/View/GUI.fxml"));
-        Pane root = (Pane) loader.load();
+        try {
+            //Load GUI
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("mms/View/GUI.fxml"));
+            Pane root = (Pane) loader.load();
 
-        //Get controller
-        PluginController controller = loader.getController();
-        controller.setPrimaryStage(stage);
+            //Get controller
+            PluginController controller = loader.getController();
+            controller.setPrimaryStage(stage);
 
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setTitle("AOPP Studios Media Player");
-        stage.getIcons().add(new Image(getClass().getClassLoader().getResource("assets/logo.png").openStream()));
-        stage.show();
-        
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("AOPP Studios Media Player");
+            stage.getIcons().add(new Image(getClass().getClassLoader().getResource("assets/logo.png").openStream()));
+            stage.show();
+        } catch (Exception ex) {
+            Logger.getGlobal().log(Level.SEVERE, null, ex);
+            Alert alert = new Alert(Alert.AlertType.ERROR, ex.getMessage());
+            alert.show();
+        }
     }
 }
