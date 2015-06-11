@@ -171,6 +171,7 @@ public class DefaultControlPlugin extends ControlPlugin {
             if (player != null) {
                 player.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
             }
+            fireEvent("CycleChanged", repeat);
         });
 
         controller.getMuteButton().setOnAction(ActionEvent -> {
