@@ -25,7 +25,6 @@ import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 import mms.Pluginsystem.ControlPlugin;
 import mms.Pluginsystem.PluginHost;
-import mms.Pluginsystem.PluginHost.Identifier;
 import mms.View.DefaultControlPlugin.Controller;
 
 /**
@@ -122,6 +121,7 @@ public class DefaultControlPlugin extends ControlPlugin {
         });
 
         player.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
+                
         player.setOnEndOfMedia(() -> {
             if (!repeat) {
                 controller.getPlayButton().setText("Play");

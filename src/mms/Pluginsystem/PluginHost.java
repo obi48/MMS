@@ -102,6 +102,7 @@ public abstract class PluginHost {
      * @param id use static Identifier class!
      * @param msgID ID of message (other plugins should know that)
      * @param args arbitrary objects (other plugins should know the type)
+     * @return true if other plugin found and successfully sended your message
      */
     public final boolean fireMessageDirectlyToPlugin(Identifier id, String msgID, Object... args){
         Stream<Plugin> plugins;

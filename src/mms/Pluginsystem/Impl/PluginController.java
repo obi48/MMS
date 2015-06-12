@@ -216,8 +216,9 @@ public class PluginController extends PluginHost implements Initializable {
     public void setPlayer(MediaPlayer player) {
         MediaPlayer p;
         if ((p = mediaView.getMediaPlayer()) != null) {
+            p.setOnStopped(null);
             p.stop();
-            player.setVolume(mediaView.getMediaPlayer().getVolume());
+            player.setVolume(p.getVolume());
         }
         mediaView.setMediaPlayer(player);
 
@@ -239,8 +240,9 @@ public class PluginController extends PluginHost implements Initializable {
 
             MediaPlayer p;
             if ((p = mediaView.getMediaPlayer()) != null) {
+                p.setOnStopped(null);
                 p.stop();
-                player.setVolume(mediaView.getMediaPlayer().getVolume());
+                player.setVolume(p.getVolume());
             }
             mediaView.setMediaPlayer(player);
 
