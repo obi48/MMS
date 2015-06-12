@@ -101,7 +101,7 @@ public class PluginController extends PluginHost implements Initializable {
         this.primaryStage = primaryStage;
 
         //On mouse double click switch to fullscreenmode
-        anchorPane.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
+        mediaView.addEventFilter(MouseEvent.MOUSE_CLICKED, (MouseEvent event) -> {
             if (event.getButton().equals(MouseButton.PRIMARY)) {
                 if (!event.isConsumed() && event.getClickCount() == 2) {
                     primaryStage.setFullScreen(!primaryStage.isFullScreen());

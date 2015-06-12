@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="478.0" prefWidth="851.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mms.View.DefaultControlPlugin.Controller">
+<AnchorPane id="AnchorPane" fx:id="anchorPane" pickOnBounds="false" prefHeight="478.0" prefWidth="851.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mms.View.DefaultControlPlugin.Controller">
     <children>
         <AnchorPane fx:id="fadePane" layoutY="427.0" prefHeight="85.0" prefWidth="851.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
             <children>

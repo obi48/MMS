@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.media.*?>
 
-<AnchorPane fx:id="anchorPane" prefHeight="448.0" prefWidth="701.0" style="-fx-background-color: Black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mms.Pluginsystem.Impl.PluginController">
+<AnchorPane fx:id="anchorPane" pickOnBounds="false" prefHeight="448.0" prefWidth="701.0" style="-fx-background-color: Black;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mms.Pluginsystem.Impl.PluginController">
    <children>
       <StackPane fx:id="stackPane" layoutX="14.0" layoutY="14.0" prefHeight="423.0" prefWidth="701.0" style="-fx-background-color: Black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
