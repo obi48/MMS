@@ -20,8 +20,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -41,7 +39,7 @@ public class DefaultMenuPlugin extends MenuPlugin {
     @Override
     public boolean start() {
         Logger.getGlobal().info("MenuPlugin started");
-
+        
         FadeTransition fade = new FadeTransition(Duration.seconds(1), menu);
         fade.setFromValue(0);
         fade.setToValue(0);

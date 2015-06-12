@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.IntFunction;
 import java.util.stream.Stream;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -19,7 +19,6 @@ import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.control.Menu;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaErrorEvent;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
@@ -39,30 +38,33 @@ public abstract class PluginHost {
      * Registers your plugin as a listener on arbitrary other plugins
      *
      * You have to override the following method:
-     * @see Plugin#onEventReceived(java.lang.String, java.lang.Object...) 
-     * 
+     *
+     * @see Plugin#onEventReceived(java.lang.String, java.lang.Object...)
+     *
      * @param listener instance of your plugin
-     * @param observable use static Identifier class!
-     * @throws mms.Pluginsystem.PluginHost.PluginNotFoundException
+     * @param id use static Identifier class!
+     * @return true if expected plugin exists
      */
-    public final void registerPluginListener(Plugin listener, Object observable) throws PluginNotFoundException {
+    public final boolean registerPluginListener(Plugin listener, Identifier id) {
         Plugin plugin;
+        Object ident = id.obj;
 
         try {
-            if (observable.equals(ControlPlugin.class)) {
+            if (ident.equals(ControlPlugin.class)) {
                 plugin = loadedPlugins.stream().filter(p -> p instanceof ControlPlugin).findFirst().get();
-            } else if (observable.equals(MenuPlugin.class)) {
+            } else if (ident.equals(MenuPlugin.class)) {
                 plugin = loadedPlugins.stream().filter(p -> p instanceof MenuPlugin).findFirst().get();
             } else { //Must be an other plugin
-                if (observable instanceof String) {
-                    plugin = loadedPlugins.stream().filter(p -> p.getID() == observable.hashCode()).findFirst().get();
+                if (ident instanceof String) {
+                    plugin = loadedPlugins.stream().filter(p -> p.getID() == ident.hashCode()).findFirst().get();
                 } else { //must be Integer
-                    plugin = loadedPlugins.stream().filter(p -> p.getID() == (int) observable).findFirst().get();
+                    plugin = loadedPlugins.stream().filter(p -> p.getID() == (int) ident).findFirst().get();
                 }
             }
             plugin.addListener(listener);
-        } catch (Exception e) {
-            throw new PluginNotFoundException("Plugin with ID = \"" + Identifier.toString(observable) + "\" is not loaded!");
+            return true;
+        } catch (NullPointerException e) {
+            return false;
         }
     }
 
@@ -70,25 +72,60 @@ public abstract class PluginHost {
      * Deregisters your plugin
      *
      * @param listener instance of your plugin
-     * @param observable use static Identifier class!
+     * @param id use static Identifier class!
      * @return true if successful
      */
-    public final boolean deregisterPluginListener(Plugin listener, Object observable) {
+    public final boolean deregisterPluginListener(Plugin listener, Identifier id) {
         Stream<Plugin> plugins;
+        Object ident = id.obj;
 
-        if (observable.equals(ControlPlugin.class)) {
+        if (ident.equals(ControlPlugin.class)) {
             plugins = loadedPlugins.stream().filter(p -> p instanceof ControlPlugin);
-        } else if (observable.equals(MenuPlugin.class)) {
+        } else if (ident.equals(MenuPlugin.class)) {
             plugins = loadedPlugins.stream().filter(p -> p instanceof MenuPlugin);
         } else { //Must be an other plugin
-            if (observable instanceof String) {
-                plugins = loadedPlugins.stream().filter(p -> p.getID() == observable.hashCode());
+            if (ident instanceof String) {
+                plugins = loadedPlugins.stream().filter(p -> p.getID() == ident.hashCode());
             } else { //must be Integer
-                plugins = loadedPlugins.stream().filter(p -> p.getID() == (int) observable);
+                plugins = loadedPlugins.stream().filter(p -> p.getID() == (int) ident);
             }
         }
 
-        return plugins.count() != 1 ? false : plugins.findFirst().get().removeListener(listener);
+        Plugin[] result = plugins.toArray((int value) -> new Plugin[value]);
+        
+        return result.length != 1 ? false : result[0].removeListener(listener);
+    }
+    
+    /**
+     * Sends message to a plugin with the specified identifier
+     * 
+     * @param id use static Identifier class!
+     * @param msgID ID of message (other plugins should know that)
+     * @param args arbitrary objects (other plugins should know the type)
+     */
+    public final boolean fireMessageDirectlyToPlugin(Identifier id, String msgID, Object... args){
+        Stream<Plugin> plugins;
+        Object ident = id.obj;
+        
+        if (ident.equals(ControlPlugin.class)) {
+            plugins = loadedPlugins.stream().filter(p -> p instanceof ControlPlugin);
+        } else if (ident.equals(MenuPlugin.class)) {
+            plugins = loadedPlugins.stream().filter(p -> p instanceof MenuPlugin);
+        } else { //Must be an other plugin
+            if (ident instanceof String) {
+                plugins = loadedPlugins.stream().filter(p -> p.getID() == ident.hashCode());
+            } else { //must be Integer
+                plugins = loadedPlugins.stream().filter(p -> p.getID() == (int) ident);
+            }
+        }
+        
+        Plugin[] result = plugins.toArray((int value) -> new Plugin[value]);
+        
+        if(result.length == 1){
+            result[0].onEventReceived(msgID, args);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -105,12 +142,12 @@ public abstract class PluginHost {
      * @deprecated please use pluginHost.setMedia(URI src) instead!
      */
     public abstract void setPlayer(MediaPlayer player);
-    
+
     /**
      * With this method it is possible to play new Media-Files, the user will be
-     * informed by an AltertMessage if an error occurs. Throws the MediaException
-     * again, you may catch it to do further errorhandling...
-     * 
+     * informed by an AltertMessage if an error occurs. Throws the
+     * MediaException again, you may catch it to do further errorhandling...
+     *
      * @param src the URI to the new media-Source
      * @throws MediaException (RuntimeException)
      */
@@ -157,29 +194,30 @@ public abstract class PluginHost {
      * @return the list of menus
      */
     public abstract ObservableList<Menu> getMenus();
-    
+
     /**
-     * If you want to get informed when the mediaplayer starts to play a new 
+     * If you want to get informed when the mediaplayer starts to play a new
      * media you have to register here!
-     * 
+     *
      * You have to override the following "see also" method:
-     * @see Plugin#onMediaPlayerChanged(javafx.scene.media.MediaPlayer) 
-     * 
+     *
+     * @see Plugin#onMediaPlayerChanged(javafx.scene.media.MediaPlayer)
+     *
      * @param plugin your plugin instance
      */
-    public void addMediaListener(Plugin plugin){
+    public void addMediaListener(Plugin plugin) {
         playerListener.add(plugin);
     }
-    
+
     /**
      * Deregisters your plugin from the mediaListeners
-     * 
+     *
      * @param plugin your plugin instance
      * @return true if successful
      */
-    public boolean removeMediaListener(Plugin plugin){
+    public boolean removeMediaListener(Plugin plugin) {
         return playerListener.remove(plugin);
-    } 
+    }
 
     /**
      * Unregisters a previously registered event filter from mainUI - node. One
@@ -196,31 +234,32 @@ public abstract class PluginHost {
     /**
      * If you want to listen on Errors of reading Media... (Errors from the
      * Mediaview)
+     *
      * @param handler your Errorhandler
      */
     public abstract void addMediaErrorHandler(ChangeListener<EventHandler<MediaErrorEvent>> handler);
-    
+
     /**
      * Unregisters a previously registered EventListener
+     *
      * @param handler your Errorhandler
      */
     public abstract void removeMediaErrorHandler(ChangeListener<EventHandler<MediaErrorEvent>> handler);
-    
-    public final class PluginNotFoundException extends RuntimeException {
-
-        public PluginNotFoundException(String message) {
-            super(message);
-        }
-    }
 
     public static class Identifier {
 
-        public static Class ControlPlugin() {
-            return ControlPlugin.class;
+        private final Object obj;
+
+        private Identifier(Object o) {
+            this.obj = o;
         }
 
-        public static Class MenuPlugin() {
-            return MenuPlugin.class;
+        public static Identifier ControlPlugin() {
+            return new Identifier(ControlPlugin.class);
+        }
+
+        public static Identifier MenuPlugin() {
+            return new Identifier(MenuPlugin.class);
         }
 
         /**
@@ -231,8 +270,8 @@ public abstract class PluginHost {
          * @param identifier as integer
          * @return
          */
-        public static int Plugin(int identifier) {
-            return identifier;
+        public static Identifier Plugin(int identifier) {
+            return new Identifier(identifier);
         }
 
         /**
@@ -241,8 +280,8 @@ public abstract class PluginHost {
          * @param identifier example: "DevName,PluginName,Version"
          * @return
          */
-        public static String Plugin(String identifier) {
-            return identifier;
+        public static Identifier Plugin(String identifier) {
+            return new Identifier(identifier);
         }
 
         static String toString(Object id) {
