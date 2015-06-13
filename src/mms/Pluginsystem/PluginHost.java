@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.function.IntFunction;
 import java.util.stream.Stream;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
@@ -92,22 +91,22 @@ public abstract class PluginHost {
         }
 
         Plugin[] result = plugins.toArray((int value) -> new Plugin[value]);
-        
+
         return result.length != 1 ? false : result[0].removeListener(listener);
     }
-    
+
     /**
      * Sends message to a plugin with the specified identifier
-     * 
+     *
      * @param id use static Identifier class!
      * @param msgID ID of message (other plugins should know that)
      * @param args arbitrary objects (other plugins should know the type)
      * @return true if other plugin found and successfully sended your message
      */
-    public final boolean fireMessageDirectlyToPlugin(Identifier id, String msgID, Object... args){
+    public final boolean fireMessageDirectlyToPlugin(Identifier id, String msgID, Object... args) {
         Stream<Plugin> plugins;
         Object ident = id.obj;
-        
+
         if (ident.equals(ControlPlugin.class)) {
             plugins = loadedPlugins.stream().filter(p -> p instanceof ControlPlugin);
         } else if (ident.equals(MenuPlugin.class)) {
@@ -119,10 +118,10 @@ public abstract class PluginHost {
                 plugins = loadedPlugins.stream().filter(p -> p.getID() == (int) ident);
             }
         }
-        
+
         Plugin[] result = plugins.toArray((int value) -> new Plugin[value]);
-        
-        if(result.length == 1){
+
+        if (result.length == 1) {
             result[0].onEventReceived(msgID, args);
             return true;
         }
@@ -247,7 +246,7 @@ public abstract class PluginHost {
      */
     public abstract void removeMediaErrorHandler(ChangeListener<EventHandler<MediaErrorEvent>> handler);
 
-    public static class Identifier {
+    public final static class Identifier {
 
         private final Object obj;
 
@@ -264,18 +263,6 @@ public abstract class PluginHost {
         }
 
         /**
-         * You need to know the ID from another plugin as integer identifier =
-         * hashCode of "DevName,PluginName,Version"
-         *
-         * @deprecated it is easier to use Plugin(String)
-         * @param identifier as integer
-         * @return
-         */
-        public static Identifier Plugin(int identifier) {
-            return new Identifier(identifier);
-        }
-
-        /**
          * You need to know the Developers name, plugin name and the version
          *
          * @param identifier example: "DevName,PluginName,Version"
@@ -283,19 +270,6 @@ public abstract class PluginHost {
          */
         public static Identifier Plugin(String identifier) {
             return new Identifier(identifier);
-        }
-
-        static String toString(Object id) {
-            if (id instanceof String) {
-                String[] data = ((String) id).split(",");
-                return "Developer [" + data[0] + "], PluginName [" + data[1] + "], Version [" + data[2] + "]";
-            } else if (id instanceof Class) {
-                return ((Class) id).getSimpleName();
-            } else if (id instanceof Integer) {
-                return "" + (int) id;
-            } else {
-                throw new IllegalArgumentException();
-            }
         }
     }
 }

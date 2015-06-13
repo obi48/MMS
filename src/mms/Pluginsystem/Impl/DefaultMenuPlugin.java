@@ -15,11 +15,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -77,7 +80,6 @@ public class DefaultMenuPlugin extends MenuPlugin {
                 String filePath = null;
                 for (File file : db.getFiles()) {
                     filePath = file.toURI().toString();
-                    
                     pluginHost.setMedia(file.toURI());
                 }
             }
@@ -113,15 +115,6 @@ public class DefaultMenuPlugin extends MenuPlugin {
             }
         });
 
-        
-        
-//            FileChooser fileChooser = new FileChooser();
-//            fileChooser.setTitle("Open Media File");
-//            fileChooser.getExtensionFilters().addAll(
-//                    new ExtensionFilter("Audio Files", "*.mp3", "*.aif", "*.aiff", "*.wav"),
-//                    new ExtensionFilter("Video Files", "*.fxm", "*.flv", "*.mp4", "*.m4v"),
-//                    new ExtensionFilter("All supported Files", "*.mp3", "*.aif", "*.aiff", "*.wav", "*.fxm", "*.flv", "*.mp4", "*.m4v"));
-//            List<File> selectedFiles = fileChooser.showOpenMultipleDialog(menu.getContextMenu());
         return true;
     }
 
