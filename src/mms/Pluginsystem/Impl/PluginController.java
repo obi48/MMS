@@ -261,22 +261,22 @@ public class PluginController extends PluginHost implements Initializable {
 
     @Override
     public <T extends Event> void addUIEventHandler(EventType<T> eventType, EventHandler<? super T> eventHandler) {
-        anchorPane.addEventHandler(eventType, eventHandler);
+        mediaView.addEventHandler(eventType, eventHandler);
     }
 
     @Override
     public <T extends Event> void addUIEventFilter(EventType<T> eventType, EventHandler<? super T> eventFilter) {
-        anchorPane.addEventFilter(eventType, eventFilter);
+        mediaView.addEventFilter(eventType, eventFilter);
     }
 
     @Override
     public <T extends Event> void removeUIEventHandler(EventType<T> eventType, EventHandler<? super T> eventHandler) {
-        anchorPane.removeEventHandler(eventType, eventHandler);
+        mediaView.removeEventHandler(eventType, eventHandler);
     }
 
     @Override
     public <T extends Event> void removeUIEventFilter(EventType<T> eventType, EventHandler<? super T> eventFilter) {
-        anchorPane.removeEventFilter(eventType, eventFilter);
+        mediaView.removeEventFilter(eventType, eventFilter);
     }
 
     @Override
