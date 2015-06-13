@@ -133,7 +133,7 @@ public class PluginController extends PluginHost implements Initializable {
             if (o1 instanceof ControlPlugin || o1 instanceof MenuPlugin && o2 instanceof Plugin) {
                 return -1;
             } else {
-                return 0; //TODO define loadorder for all other plugins!
+                return 1; //TODO define loadorder for all other plugins!
             }
         });
 
