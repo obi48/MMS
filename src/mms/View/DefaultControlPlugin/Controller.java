@@ -57,11 +57,17 @@ public class Controller implements Initializable {
     private Text marqueeText;
 
     private final Timeline textMaqueeTimer = new Timeline(80);
+    @FXML
+    private Button prevButton;
+    @FXML
+    private Button nextButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         volumeSlider.setTooltip(new Tooltip("Volume"));
         timeSlider.setTooltip(new Tooltip("Search bar"));
+        prevButton.setTooltip(new Tooltip("Previous"));
+        nextButton.setTooltip(new Tooltip("Next"));
 
         // Create an indefinite time line.
         textMaqueeTimer.getKeyFrames().addAll(
@@ -151,6 +157,14 @@ public class Controller implements Initializable {
 
     public Button getPlayButton() {
         return playButton;
+    }
+    
+    public Button getPrevButton(){
+        return prevButton;
+    }
+    
+    public Button getNextButton(){
+        return nextButton;
     }
 
     public void updateValues(MediaPlayer mp, Duration duration) {

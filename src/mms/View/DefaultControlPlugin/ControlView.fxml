@@ -28,9 +28,13 @@
                             <children>
                                 <ToggleButton fx:id="cycleButton" mnemonicParsing="false" text="Cycle">
                                 </ToggleButton>
+                        <Label layoutX="420.0" layoutY="15.0" text="    " />
+                        <Button fx:id="prevButton" defaultButton="true" disable="true" mnemonicParsing="false" text="&lt;" />
                                 <Label layoutX="405.0" layoutY="15.0" text="    " />
                                 <Button fx:id="playButton" alignment="CENTER" layoutX="213.0" layoutY="4.0" mnemonicParsing="false" text="Play" textAlignment="CENTER" BorderPane.alignment="CENTER" />
                                 <Label text="    " />
+                        <Button fx:id="nextButton" defaultButton="true" disable="true" mnemonicParsing="false" text="&gt;" />
+                        <Label layoutX="349.0" layoutY="15.0" text="    " />
                                 <ToggleButton fx:id="muteButton" mnemonicParsing="false" text="Mute" />
                                 <Label layoutX="86.0" layoutY="34.0" text="    " />
                                 <Slider fx:id="volumeSlider" layoutX="330.0" layoutY="9.0" prefHeight="14.0" prefWidth="108.0" AnchorPane.rightAnchor="0.0" />

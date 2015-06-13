@@ -160,6 +160,9 @@ public class DefaultControlPlugin extends ControlPlugin {
         } catch (IOException ex) {
             Logger.getLogger(DefaultControlPlugin.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        fireEvent("PrevButton", controller.getPrevButton());
+        fireEvent("NextButton", controller.getNextButton());
 
         controller.getCycleButton().setOnAction(ActionEvent -> {
             if (controller.getCycleButton().isSelected()) {
