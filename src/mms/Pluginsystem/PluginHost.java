@@ -63,7 +63,7 @@ public abstract class PluginHost {
             }
             plugin.addListener(listener);
             return true;
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             return false;
         }
     }

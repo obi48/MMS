@@ -106,4 +106,10 @@ public abstract class Plugin {
      * @param args arbitrary objects
      */
     public void onEventReceived(String eventID, Object... args) {}
+    
+    /**
+     * Override this method if you want to make initialisations or other stuff
+     * before the application really starts (befor start() - method) 
+     */
+    public void preInit(){ }
 }

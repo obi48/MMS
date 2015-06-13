@@ -137,6 +137,10 @@ public class PluginController extends PluginHost implements Initializable {
             }
         });
 
+        //Call preInit of all plugins
+        loadedPlugins.stream().forEach(pi -> pi.preInit());
+        
+        //Start all plugins
         loadedPlugins.stream().forEach(pi -> pi.start());
     }
 

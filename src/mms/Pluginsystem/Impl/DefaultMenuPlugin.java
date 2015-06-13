@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import mms.Pluginsystem.MenuPlugin;
 import mms.Pluginsystem.PluginHost;
+import mms.Pluginsystem.PluginHost.Identifier;
 
 /**
  *
@@ -112,6 +113,8 @@ public class DefaultMenuPlugin extends MenuPlugin {
             }
         });
 
+        
+        
 //            FileChooser fileChooser = new FileChooser();
 //            fileChooser.setTitle("Open Media File");
 //            fileChooser.getExtensionFilters().addAll(
@@ -146,5 +149,5 @@ public class DefaultMenuPlugin extends MenuPlugin {
     @Override
     public String getDescription() {
         return "Implements a default menuBar for a mediaPlayer";
-    }
+    } 
 }
