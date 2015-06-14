@@ -18,14 +18,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.effect.SepiaTone;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
-import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import mms.Pluginsystem.ControlPlugin;
 import mms.Pluginsystem.PluginHost;
+import mms.Pluginsystem.PluginHost.Identifier;
 import mms.View.DefaultControlPlugin.Controller;
 
 /**
@@ -47,7 +48,7 @@ public class DefaultControlPlugin extends ControlPlugin {
     }
 
     @Override
-    public void onMediaPlayerChanged(MediaPlayer player) {  
+    public void onMediaPlayerChanged(MediaPlayer player) {
         this.player = player;
         player.play();
 
@@ -87,7 +88,7 @@ public class DefaultControlPlugin extends ControlPlugin {
             controller.getPlayButton().setText("Play");
             setControlHideEffects(false);
         });
-        
+
         player.setOnStopped(() -> {
             setControlHideEffects(false);
         });
@@ -95,7 +96,7 @@ public class DefaultControlPlugin extends ControlPlugin {
         player.setOnReady(() -> {
             duration = player.getMedia().getDuration();
             controller.updateValues(player, duration);
-            
+
             ObservableMap<String, Object> metaData = player.getMedia().getMetadata();
 
             //Metadata marquee animation
@@ -122,7 +123,7 @@ public class DefaultControlPlugin extends ControlPlugin {
         });
 
         player.setCycleCount(repeat ? MediaPlayer.INDEFINITE : 1);
-                
+
         player.setOnEndOfMedia(() -> {
             if (!repeat) {
                 controller.getPlayButton().setText("Play");
@@ -142,9 +143,9 @@ public class DefaultControlPlugin extends ControlPlugin {
         controller.getVolumeSlider().valueProperty().addListener(Observable -> {
             player.setVolume(controller.getVolumeSlider().getValue() / 100.0);
         });
-        
+
         player.setOnError(() -> {
-            Logger.getGlobal().severe("MediaPlayer error!");
+            Logger.getGlobal().severe("MediaPlayer error!\n" + player.errorProperty().getValue().getMessage());
         });
     }
 
@@ -152,6 +153,7 @@ public class DefaultControlPlugin extends ControlPlugin {
     public boolean start() {
         Logger.getGlobal().info("ControlPlugin started");
 
+        //Load FXML file (where GUI is defined)
         FXMLLoader fxmlLoader = new FXMLLoader();
 
         try {
@@ -161,9 +163,15 @@ public class DefaultControlPlugin extends ControlPlugin {
         } catch (IOException ex) {
             Logger.getLogger(DefaultControlPlugin.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        fireEvent("PrevButton", controller.getPrevButton());
-        fireEvent("NextButton", controller.getNextButton());
+
+        //Send next and previous button to Playlist - Plugin
+        if (!pluginHost.fireMessageDirectlyToPlugin(Identifier.Plugin("AOPP Studios,PlaylistPlugin,1.0"), "PrevButton", controller.getPrevButton())
+                || !pluginHost.fireMessageDirectlyToPlugin(Identifier.Plugin("AOPP Studios,PlaylistPlugin,1.0"), "NextButton", controller.getNextButton())) {
+            //if one of them is not successful (no Playlist plugin loaded) then delete the buttons)
+            FlowPane parent = (FlowPane) controller.getPrevButton().getParent();
+            parent.getChildren().remove(controller.getPrevButton());
+            parent.getChildren().remove(controller.getNextButton());
+        }
 
         controller.getCycleButton().setOnAction(ActionEvent -> {
             if (controller.getCycleButton().isSelected()) {
@@ -220,7 +228,7 @@ public class DefaultControlPlugin extends ControlPlugin {
             if (player != null && player.getStatus() == Status.PLAYING) {
                 setControlHideEffects(true);
             }
-        });        
+        });
         return true;
     }
 

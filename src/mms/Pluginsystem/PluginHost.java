@@ -221,7 +221,7 @@ public abstract class PluginHost {
      *
      * @param plugin your plugin instance
      */
-    public void addMediaListener(Plugin plugin) {
+    public final void addMediaListener(Plugin plugin) {
         playerListener.add(plugin);
     }
 
@@ -231,7 +231,7 @@ public abstract class PluginHost {
      * @param plugin your plugin instance
      * @return true if successful
      */
-    public boolean removeMediaListener(Plugin plugin) {
+    public final boolean removeMediaListener(Plugin plugin) {
         return playerListener.remove(plugin);
     }
 
