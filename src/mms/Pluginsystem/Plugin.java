@@ -104,6 +104,12 @@ public abstract class Plugin {
         listener.stream().forEach(p -> p.onEventReceived(eventID, args));
     }
 
+    /**
+     * This method will be only called if your plugin is a MediaListener
+     * 
+     * @see PluginHost#addMediaListener(mms.Pluginsystem.Plugin) 
+     * @param player the actual MediaPlayer
+     */
     public void onMediaPlayerChanged(MediaPlayer player) {
     }
 

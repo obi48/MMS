@@ -22,6 +22,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.media.MediaView;
+import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import mms.Pluginsystem.ControlPlugin;
 import mms.Pluginsystem.PluginHost;
@@ -94,7 +95,7 @@ public class DefaultControlPlugin extends ControlPlugin {
         player.setOnReady(() -> {
             duration = player.getMedia().getDuration();
             controller.updateValues(player, duration);
-
+            
             ObservableMap<String, Object> metaData = player.getMedia().getMetadata();
 
             //Metadata marquee animation

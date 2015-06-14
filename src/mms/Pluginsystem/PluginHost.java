@@ -21,6 +21,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaErrorEvent;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * This is the API for the plugin - devs, here are all methods listed which are
@@ -33,6 +34,22 @@ public abstract class PluginHost {
     protected final List<Plugin> loadedPlugins = new ArrayList<>();
     protected final Set<Plugin> playerListener = new CopyOnWriteArraySet<>();
 
+    /**
+     * Call this method if you want to know all supported Audio formats
+     * @return all supported formats
+     */
+    public final static String[] getSupportedAudioFormats(){
+        return new String[]{"*.mp3", "*.aif", "*.aiff", "*.wav", "*.m4a"};
+    }
+    
+    /**
+     * Call this method if you want to know all supported Video formats
+     * @return all supported formats
+     */
+    public final static String[] getSupportedVideoFormats(){
+        return new String[]{"*.mp3", "*.fxm", "*.flv", "*.mp4", "*.m4v"};
+    }
+    
     /**
      * Registers your plugin as a listener on arbitrary other plugins
      *
