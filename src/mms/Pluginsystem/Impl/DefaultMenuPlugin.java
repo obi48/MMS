@@ -95,7 +95,7 @@ public class DefaultMenuPlugin extends MenuPlugin {
 
         openItem.setOnAction(ActionEvent -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Add Files to selected Playlist");
+            fileChooser.setTitle("Add file to play");
             fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
             List<String> temp = new ArrayList<>();
             temp.addAll(java.util.Arrays.asList(PluginHost.getSupportedVideoFormats()));
