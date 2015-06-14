@@ -47,7 +47,7 @@ public abstract class PluginHost {
      * @return all supported formats
      */
     public final static String[] getSupportedVideoFormats(){
-        return new String[]{"*.mp3", "*.fxm", "*.flv", "*.mp4", "*.m4v"};
+        return new String[]{"*.fxm", "*.flv", "*.mp4", "*.m4v"};
     }
     
     /**
