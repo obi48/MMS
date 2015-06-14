@@ -21,7 +21,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaErrorEvent;
 import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * This is the API for the plugin - devs, here are all methods listed which are
